@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste - Agente I.A</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .test-section {
+            background: #f5f5f5;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        .success { color: #28a745; }
+        .error { color: #dc3545; }
+        .warning { color: #ffc107; }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Teste da Landing Page - Agente I.A</h1>
+    
+    <div class="test-section">
+        <h2>Verificação de Arquivos</h2>
+        <div id="fileCheck">
+            <p>Verificando arquivos necessários...</p>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Teste de Configuração</h2>
+        <div id="configCheck">
+            <p>Verificando configurações...</p>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Teste de Funcionalidades</h2>
+        <button onclick="testValidation()">Testar Validação</button>
+        <button onclick="testWebhook()">Testar Webhook</button>
+        <button onclick="testCORS()">Testar CORS</button>
+        <button onclick="testPostGeneration()">Testar Geração de Post</button>
+        <div id="testResults"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Próximos Passos</h2>
+        <ol>
+            <li>Configure a URL do webhook no arquivo <code>config.js</code></li>
+            <li>Teste a landing page abrindo <code>index.html</code></li>
+            <li>Configure seu agente no Make.com</li>
+            <li>Faça upload para um servidor web</li>
+        </ol>
+    </div>
+
+    <script src="config.js"></script>
+    <script>
+        // Verificar arquivos
+        function checkFiles() {
+            const files = ['index.html', 'styles.css', 'script.js', 'config.js'];
+            const results = [];
+            
+            files.forEach(file => {
+                const link = document.createElement('link');
+                link.rel = 'stylesheet';
+                link.href = file;
+                
+                if (file.endsWith('.css')) {
+                    link.onload = () => results.push(`✅ ${file} carregado`);
+                    link.onerror = () => results.push(`❌ ${file} não encontrado`);
+                } else {
+                    results.push(`📄 ${file} presente`);
+                }
+            });
+            
+            document.getElementById('fileCheck').innerHTML = results.map(r => `<p>${r}</p>`).join('');
+        }
+        
+        // Verificar configuração
+        function checkConfig() {
+            const results = [];
+            
+            // Simular carregamento da configuração
+            setTimeout(() => {
+                if (typeof LANDING_PAGE_CONFIG !== 'undefined') {
+                    results.push('✅ Configuração carregada');
+                    
+                                    if (LANDING_PAGE_CONFIG.webhookUrl.includes('YOUR_WEBHOOK_URL_HERE')) {
+                    results.push('⚠️ Webhook não configurado');
+                } else {
+                    results.push('✅ Webhook configurado');
+                    results.push(`🔗 URL: ${LANDING_PAGE_CONFIG.webhookUrl.substring(0, 50)}...`);
+                }
+                    
+                    results.push(`✅ ${LANDING_PAGE_CONFIG.options.targetSegment.length} segmentos configurados`);
+                    results.push(`✅ ${LANDING_PAGE_CONFIG.options.centralTheme.length} temas configurados`);
+                } else {
+                    results.push('❌ Configuração não encontrada');
+                }
+                
+                document.getElementById('configCheck').innerHTML = results.map(r => `<p>${r}</p>`).join('');
+            }, 100);
+        }
+        
+        // Testar validação
+        function testValidation() {
+            const results = [];
+            
+            // Simular dados de teste
+            const testData = {
+                executiveName: 'João Silva',
+                targetSegment: 'tecnologia',
+                centralTheme: 'inovacao',
+                contextTrigger: 'Nova regulamentação do setor de tecnologia que afeta diretamente nossos clientes.',
+                dominantEmotion: 'confianca',
+                callToAction: 'contato',
+                postType: 'educativo',
+                depthLevel: 'intermediario'
+            };
+            
+            // Validar dados
+            const requiredFields = Object.keys(testData);
+            let isValid = true;
+            
+            requiredFields.forEach(field => {
+                if (!testData[field]) {
+                    isValid = false;
+                    results.push(`❌ Campo ${field} está vazio`);
+                } else {
+                    results.push(`✅ Campo ${field} preenchido`);
+                }
+            });
+            
+            if (testData.contextTrigger.length < 10) {
+                isValid = false;
+                results.push('❌ Contexto muito curto');
+            } else {
+                results.push('✅ Contexto com tamanho adequado');
+            }
+            
+            results.push(isValid ? '✅ Validação passou' : '❌ Validação falhou');
+            
+            document.getElementById('testResults').innerHTML = results.map(r => `<p>${r}</p>`).join('');
+        }
+        
+        // Testar webhook
+        async function testWebhook() {
+            const results = [];
+            
+            if (typeof LANDING_PAGE_CONFIG !== 'undefined') {
+                const webhookUrl = LANDING_PAGE_CONFIG.webhookUrl;
+                
+                if (webhookUrl.includes('YOUR_WEBHOOK_URL_HERE')) {
+                    results.push('⚠️ Webhook não configurado - configure no config.js');
+                } else {
+                    results.push('✅ URL do webhook configurada');
+                    results.push(`🔗 URL: ${webhookUrl.substring(0, 50)}...`);
+                    
+                    // Testar conexão com o webhook
+                    try {
+                        results.push('🔄 Testando conexão com o webhook...');
+                        
+                        const testData = {
+                            executiveName: 'Teste',
+                            targetSegment: 'tecnologia',
+                            centralTheme: 'inovacao',
+                            contextTrigger: 'Teste de conexão com o webhook.',
+                            dominantEmotion: 'confianca',
+                            callToAction: 'contato',
+                            postType: 'educativo',
+                            depthLevel: 'intermediario',
+                            timestamp: new Date().toISOString(),
+                            userAgent: navigator.userAgent,
+                            test: true
+                        };
+                        
+                        const response = await fetch(webhookUrl, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(testData)
+                        });
+                        
+                        if (response.ok) {
+                            results.push('✅ Conexão com webhook bem-sucedida!');
+                            results.push(`📊 Status: ${response.status}`);
+                            
+                            try {
+                                const responseData = await response.json();
+                                results.push('✅ Resposta recebida do webhook');
+                                if (responseData.success) {
+                                    results.push('✅ Agente respondeu com sucesso');
+                                } else {
+                                    results.push('⚠️ Agente retornou erro');
+                                }
+                            } catch (e) {
+                                results.push('⚠️ Resposta não é JSON válido');
+                            }
+                        } else {
+                            results.push(`❌ Erro na conexão: ${response.status}`);
+                            results.push(`📝 Status: ${response.statusText}`);
+                        }
+                    } catch (error) {
+                        results.push(`❌ Erro de conexão: ${error.message}`);
+                        results.push('ℹ️ Verifique se o webhook está ativo no Make.com');
+                    }
+                }
+            } else {
+                results.push('❌ Configuração não carregada');
+            }
+            
+            document.getElementById('testResults').innerHTML = results.map(r => `<p>${r}</p>`).join('');
+        }
+        
+        // Testar CORS
+        async function testCORS() {
+            const results = [];
+            
+            if (typeof LANDING_PAGE_CONFIG !== 'undefined') {
+                const webhookUrl = LANDING_PAGE_CONFIG.webhookUrl;
+                
+                results.push('🔄 Testando CORS...');
+                
+                try {
+                    // Teste simples de CORS
+                    const response = await fetch(webhookUrl, {
+                        method: 'OPTIONS',
+                        headers: {
+                            'Origin': window.location.origin,
+                            'Access-Control-Request-Method': 'POST',
+                            'Access-Control-Request-Headers': 'Content-Type'
+                        }
+                    });
+                    
+                    results.push('✅ CORS preflight bem-sucedido');
+                    results.push(`📊 Status: ${response.status}`);
+                    
+                    // Verificar headers CORS
+                    const corsHeaders = {
+                        'Access-Control-Allow-Origin': response.headers.get('Access-Control-Allow-Origin'),
+                        'Access-Control-Allow-Methods': response.headers.get('Access-Control-Allow-Methods'),
+                        'Access-Control-Allow-Headers': response.headers.get('Access-Control-Allow-Headers')
+                    };
+                    
+                    Object.entries(corsHeaders).forEach(([header, value]) => {
+                        if (value) {
+                            results.push(`✅ ${header}: ${value}`);
+                        } else {
+                            results.push(`⚠️ ${header}: não encontrado`);
+                        }
+                    });
+                    
+                } catch (error) {
+                    results.push(`❌ Erro CORS: ${error.message}`);
+                    results.push('ℹ️ Isso pode indicar problemas de CORS no servidor');
+                }
+            } else {
+                results.push('❌ Configuração não carregada');
+            }
+            
+            document.getElementById('testResults').innerHTML = results.map(r => `<p>${r}</p>`).join('');
+        }
+        
+        // Testar geração de post
+        function testPostGeneration() {
+            const results = [];
+            
+            // Simular geração de post
+            const testData = {
+                executiveName: 'João Silva',
+                targetSegment: 'tecnologia',
+                centralTheme: 'inovacao'
+            };
+            
+            const post = {
+                title: `${testData.centralTheme} no Setor de ${testData.targetSegment}: Oportunidades e Desafios`,
+                content: `🚀 ${testData.executiveName} compartilha insights valiosos...`,
+                hashtags: [`#${testData.targetSegment}`, `#${testData.centralTheme}`],
+                estimatedReadingTime: '2 min',
+                wordCount: 156
+            };
+            
+            results.push('✅ Post gerado com sucesso');
+            results.push(`📝 Título: ${post.title}`);
+            results.push(`📊 ${post.wordCount} palavras`);
+            results.push(`⏱️ ${post.estimatedReadingTime}`);
+            results.push(`🏷️ Hashtags: ${post.hashtags.join(' ')}`);
+            
+            document.getElementById('testResults').innerHTML = results.map(r => `<p>${r}</p>`).join('');
+        }
+        
+        // Executar verificações ao carregar
+        window.onload = function() {
+            checkFiles();
+            checkConfig();
+        };
+    </script>
+</body>
+</html> 

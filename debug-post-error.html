@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug - Erro na Geração de Posts</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .debug-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .error {
+            background: #ffebee;
+            color: #c62828;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .success {
+            background: #e8f5e8;
+            color: #2e7d32;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .info {
+            background: #e3f2fd;
+            color: #1565c0;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        button {
+            background: #012774;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #0138A7;
+        }
+        .log {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .form-group {
+            margin: 10px 0;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1><i class="fas fa-bug"></i> Debug - Erro na Geração de Posts</h1>
+    
+    <div class="debug-section">
+        <h2>1. Verificação de Configuração</h2>
+        <button onclick="checkConfig()">Verificar Configuração</button>
+        <div id="configResult"></div>
+    </div>
+
+    <div class="debug-section">
+        <h2>2. Teste de Conectividade</h2>
+        <button onclick="testWebhook()">Testar Webhook</button>
+        <div id="webhookResult"></div>
+    </div>
+
+    <div class="debug-section">
+        <h2>3. Teste Completo do Formulário</h2>
+        <form id="testForm">
+            <div class="form-group">
+                <label>Nome do Executivo:</label>
+                <input type="text" id="executiveName" value="João Silva" required>
+            </div>
+            <div class="form-group">
+                <label>Segmento:</label>
+                <select id="targetSegment" required>
+                    <option value="">Selecione...</option>
+                    <option value="Tecnologia" selected>Tecnologia</option>
+                    <option value="Saúde">Saúde</option>
+                    <option value="Finanças">Finanças</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Tema Central:</label>
+                <select id="centralTheme" required>
+                    <option value="">Selecione...</option>
+                    <option value="Inovação" selected>Inovação</option>
+                    <option value="Tendências">Tendências</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Contexto:</label>
+                <textarea id="contextTrigger" rows="3" required>Nova tecnologia disruptiva no mercado</textarea>
+            </div>
+            <div class="form-group">
+                <label>Emoção:</label>
+                <select id="dominantEmotion" required>
+                    <option value="">Selecione...</option>
+                    <option value="Confiança" selected>Confiança</option>
+                    <option value="Entusiasmo">Entusiasmo</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Call to Action:</label>
+                <select id="callToAction" required>
+                    <option value="">Selecione...</option>
+                    <option value="Entre em Contato" selected>Entre em Contato</option>
+                    <option value="Agende uma Reunião">Agende uma Reunião</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Tipo de Post:</label>
+                <select id="postType" required>
+                    <option value="">Selecione...</option>
+                    <option value="Educativo" selected>Educativo</option>
+                    <option value="Promocional">Promocional</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Nível:</label>
+                <select id="depthLevel" required>
+                    <option value="">Selecione...</option>
+                    <option value="Básico" selected>Básico</option>
+                    <option value="Intermediário">Intermediário</option>
+                </select>
+            </div>
+            <button type="submit">Testar Geração Completa</button>
+        </form>
+        <div id="formResult"></div>
+    </div>
+
+    <div class="debug-section">
+        <h2>4. Logs de Debug</h2>
+        <button onclick="clearLogs()">Limpar Logs</button>
+        <div id="debugLogs" class="log"></div>
+    </div>
+
+    <script src="config.js"></script>
+    <script>
+        let debugLogs = [];
+
+        function log(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = `[${timestamp}] ${type.toUpperCase()}: ${message}`;
+            debugLogs.push(logEntry);
+            
+            const logsDiv = document.getElementById('debugLogs');
+            logsDiv.textContent = debugLogs.join('\n');
+            logsDiv.scrollTop = logsDiv.scrollHeight;
+            
+            console.log(logEntry);
+        }
+
+        function clearLogs() {
+            debugLogs = [];
+            document.getElementById('debugLogs').textContent = '';
+        }
+
+        function checkConfig() {
+            log('Iniciando verificação de configuração...');
+            
+            const resultDiv = document.getElementById('configResult');
+            let html = '';
+            
+            try {
+                // Verificar se config.js foi carregado
+                if (typeof LANDING_PAGE_CONFIG === 'undefined') {
+                    throw new Error('LANDING_PAGE_CONFIG não está definido');
+                }
+                
+                html += '<div class="success">✅ Configuração carregada com sucesso</div>';
+                
+                // Verificar webhook URL
+                if (!LANDING_PAGE_CONFIG.webhookUrl) {
+                    throw new Error('URL do webhook não configurada');
+                }
+                
+                html += `<div class="info">🌐 Webhook URL: ${LANDING_PAGE_CONFIG.webhookUrl}</div>`;
+                
+                // Verificar opções
+                if (!LANDING_PAGE_CONFIG.options) {
+                    throw new Error('Opções não configuradas');
+                }
+                
+                html += '<div class="success">✅ Opções configuradas</div>';
+                
+                // Verificar validação
+                if (!LANDING_PAGE_CONFIG.validation) {
+                    throw new Error('Validação não configurada');
+                }
+                
+                html += '<div class="success">✅ Validação configurada</div>';
+                
+                log('Configuração verificada com sucesso');
+                
+            } catch (error) {
+                html += `<div class="error">❌ Erro: ${error.message}</div>`;
+                log(`Erro na configuração: ${error.message}`, 'error');
+            }
+            
+            resultDiv.innerHTML = html;
+        }
+
+        async function testWebhook() {
+            log('Iniciando teste do webhook...');
+            
+            const resultDiv = document.getElementById('webhookResult');
+            let html = '';
+            
+            try {
+                const testData = {
+                    executiveName: 'Teste Debug',
+                    targetSegment: 'Tecnologia',
+                    centralTheme: 'Inovação',
+                    contextTrigger: 'Teste de conectividade',
+                    dominantEmotion: 'Confiança',
+                    callToAction: 'Entre em Contato',
+                    postType: 'Educativo',
+                    depthLevel: 'Básico'
+                };
+                
+                log(`Enviando dados de teste: ${JSON.stringify(testData)}`);
+                
+                const response = await fetch(LANDING_PAGE_CONFIG.webhookUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(testData)
+                });
+                
+                log(`Status da resposta: ${response.status} ${response.statusText}`);
+                
+                if (response.ok) {
+                    // CORREÇÃO: Ler o corpo da resposta apenas UMA vez
+                    const responseText = await response.text();
+                    log(`Resposta recebida: ${responseText.substring(0, 200)}...`);
+                    
+                    html += '<div class="success">✅ Webhook funcionando</div>';
+                    html += `<div class="info">📥 Status: ${response.status}</div>`;
+                    html += `<div class="info">📄 Resposta: ${responseText.substring(0, 100)}...</div>`;
+                } else {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+            } catch (error) {
+                html += `<div class="error">❌ Erro no webhook: ${error.message}</div>`;
+                log(`Erro no webhook: ${error.message}`, 'error');
+            }
+            
+            resultDiv.innerHTML = html;
+        }
+
+        document.getElementById('testForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            log('Iniciando teste completo do formulário...');
+            
+            const resultDiv = document.getElementById('formResult');
+            let html = '';
+            
+            try {
+                // Coletar dados do formulário
+                const formData = {
+                    executiveName: document.getElementById('executiveName').value,
+                    targetSegment: document.getElementById('targetSegment').value,
+                    centralTheme: document.getElementById('centralTheme').value,
+                    contextTrigger: document.getElementById('contextTrigger').value,
+                    dominantEmotion: document.getElementById('dominantEmotion').value,
+                    callToAction: document.getElementById('callToAction').value,
+                    postType: document.getElementById('postType').value,
+                    depthLevel: document.getElementById('depthLevel').value
+                };
+                
+                log(`Dados do formulário: ${JSON.stringify(formData)}`);
+                
+                // Validar campos obrigatórios
+                const requiredFields = LANDING_PAGE_CONFIG.validation.required;
+                for (const field of requiredFields) {
+                    if (!formData[field] || formData[field].trim() === '') {
+                        throw new Error(`Campo obrigatório não preenchido: ${field}`);
+                    }
+                }
+                
+                log('Validação do formulário aprovada');
+                
+                // Enviar para webhook
+                const response = await fetch(LANDING_PAGE_CONFIG.webhookUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                log(`Status da resposta: ${response.status}`);
+                
+                if (response.ok) {
+                    // CORREÇÃO: Ler o corpo da resposta apenas UMA vez
+                    const responseText = await response.text();
+                    let responseData;
+                    
+                    try {
+                        responseData = JSON.parse(responseText);
+                        log('Resposta JSON recebida');
+                    } catch (parseError) {
+                        responseData = responseText;
+                        log('Resposta como texto recebida');
+                    }
+                    
+                    log(`Conteúdo da resposta: ${JSON.stringify(responseData).substring(0, 200)}...`);
+                    
+                    html += '<div class="success">✅ Post gerado com sucesso!</div>';
+                    html += `<div class="info">📄 Conteúdo: ${JSON.stringify(responseData).substring(0, 100)}...</div>`;
+                    
+                } else {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+            } catch (error) {
+                html += `<div class="error">❌ Erro: ${error.message}</div>`;
+                log(`Erro no teste: ${error.message}`, 'error');
+            }
+            
+            resultDiv.innerHTML = html;
+        });
+
+        // Auto-executar verificação de configuração
+        window.addEventListener('load', function() {
+            log('Página de debug carregada');
+            checkConfig();
+        });
+    </script>
+</body>
+</html> 

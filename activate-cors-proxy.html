@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ativar Proxy CORS - Agente I.A</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .step {
+            margin: 20px 0;
+            padding: 15px;
+            border-left: 4px solid #007bff;
+            background: #f8f9fa;
+        }
+        .warning {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 5px;
+            font-size: 16px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .code {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Ativar Proxy CORS - Solução Temporária</h1>
+        
+        <div class="warning">
+            <strong>⚠️ Atenção:</strong> Esta é uma solução temporária para resolver os erros 410 e CORS. 
+            Para uma solução permanente, configure CORS no Make.com seguindo o guia.
+        </div>
+        
+        <div class="step">
+            <h3>Passo 1: Ativar Proxy CORS</h3>
+            <p>O proxy CORS precisa ser ativado uma vez por sessão. Clique no botão abaixo:</p>
+            <button onclick="activateProxy()">Ativar Proxy CORS</button>
+            <div id="proxyStatus"></div>
+        </div>
+        
+        <div class="step">
+            <h3>Passo 2: Testar Conexão</h3>
+            <p>Após ativar o proxy, teste a conexão com o webhook:</p>
+            <button onclick="testConnection()">Testar Conexão</button>
+            <div id="testStatus"></div>
+        </div>
+        
+        <div class="step">
+            <h3>Passo 3: Usar Landing Page</h3>
+            <p>Se o teste for bem-sucedido, você pode usar a landing page:</p>
+            <button onclick="openLandingPage()">Abrir Landing Page</button>
+        </div>
+        
+        <div class="success">
+            <h3>✅ Solução Permanente</h3>
+            <p>Para uma solução permanente, siga o guia em <code>make-cors-setup.md</code> para configurar CORS no Make.com.</p>
+        </div>
+        
+        <div class="code">
+            <strong>URL do Webhook com Proxy:</strong><br>
+            https://cors-anywhere.herokuapp.com/https://hook.us2.make.com/tyg6dmg588t2afk9qsofxgeruutr5drr
+        </div>
+    </div>
+
+    <script>
+        async function activateProxy() {
+            const statusDiv = document.getElementById('proxyStatus');
+            statusDiv.innerHTML = '<p>🔄 Ativando proxy CORS...</p>';
+            
+            try {
+                const response = await fetch('https://cors-anywhere.herokuapp.com/corsdemo');
+                
+                if (response.ok) {
+                    statusDiv.innerHTML = '<p style="color: green;">✅ Proxy CORS ativado com sucesso!</p>';
+                } else {
+                    statusDiv.innerHTML = '<p style="color: orange;">⚠️ Proxy pode precisar de ativação manual</p>';
+                    statusDiv.innerHTML += '<p>Visite: <a href="https://cors-anywhere.herokuapp.com/corsdemo" target="_blank">https://cors-anywhere.herokuapp.com/corsdemo</a></p>';
+                }
+            } catch (error) {
+                statusDiv.innerHTML = '<p style="color: red;">❌ Erro ao ativar proxy: ' + error.message + '</p>';
+            }
+        }
+        
+        async function testConnection() {
+            const statusDiv = document.getElementById('testStatus');
+            statusDiv.innerHTML = '<p>🔄 Testando conexão...</p>';
+            
+            const webhookUrl = 'https://cors-anywhere.herokuapp.com/https://hook.us2.make.com/tyg6dmg588t2afk9qsofxgeruutr5drr';
+            
+            try {
+                const testData = {
+                    executiveName: 'Teste',
+                    targetSegment: 'tecnologia',
+                    centralTheme: 'inovacao',
+                    contextTrigger: 'Teste de conexão com proxy CORS.',
+                    dominantEmotion: 'confianca',
+                    callToAction: 'contato',
+                    postType: 'educativo',
+                    depthLevel: 'intermediario',
+                    timestamp: new Date().toISOString(),
+                    userAgent: navigator.userAgent,
+                    test: true
+                };
+                
+                const response = await fetch(webhookUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(testData)
+                });
+                
+                if (response.ok) {
+                    statusDiv.innerHTML = '<p style="color: green;">✅ Conexão bem-sucedida! Status: ' + response.status + '</p>';
+                    statusDiv.innerHTML += '<p>🎉 A landing page deve funcionar agora!</p>';
+                } else {
+                    statusDiv.innerHTML = '<p style="color: red;">❌ Erro na conexão: ' + response.status + ' ' + response.statusText + '</p>';
+                }
+            } catch (error) {
+                statusDiv.innerHTML = '<p style="color: red;">❌ Erro de conexão: ' + error.message + '</p>';
+                
+                if (error.message.includes('CORS')) {
+                    statusDiv.innerHTML += '<p>💡 Dica: Ative o proxy CORS primeiro</p>';
+                }
+            }
+        }
+        
+        function openLandingPage() {
+            window.open('index.html', '_blank');
+        }
+        
+        // Verificar se o proxy está ativo ao carregar a página
+        window.onload = function() {
+            fetch('https://cors-anywhere.herokuapp.com/corsdemo')
+                .then(response => {
+                    if (response.ok) {
+                        document.getElementById('proxyStatus').innerHTML = '<p style="color: green;">✅ Proxy CORS já está ativo!</p>';
+                    }
+                })
+                .catch(() => {
+                    // Proxy não está ativo, mas isso é normal
+                });
+        };
+    </script>
+</body>
+</html> 

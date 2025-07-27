@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DCSP - Deepdive + Discovery</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Ferramenta de análise profunda e descoberta de insights com IA avançada da DCSP.">
+    <meta name="keywords" content="DCSP, deepdive, discovery, análise, insights, IA, inteligência artificial">
+    <meta name="author" content="DCSP">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="DCSP - Deepdive + Discovery">
+    <meta property="og:description" content="Ferramenta de análise profunda e descoberta de insights com IA avançada da DCSP.">
+    <meta property="og:type" content="website">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Sidebar Menu -->
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <h2>DCSP</h2>
+            <p>Ferramentas IA</p>
+        </div>
+        
+        <ul class="sidebar-menu">
+            <li class="menu-item">
+                <a href="index.html">
+                    <i class="fas fa-edit"></i>
+                    <span>Criador de Posts</span>
+                </a>
+            </li>
+            <li class="menu-item active">
+                <a href="deepdive.html">
+                    <i class="fas fa-search"></i>
+                    <span>Deepdive + Discovery</span>
+                </a>
+            </li>
+        </ul>
+        
+        <div class="sidebar-footer">
+            <p>© 2024 DCSP</p>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <div class="main-wrapper">
+        <!-- Header -->
+        <header class="header">
+            <div class="container">
+                <h1>Deepdive + Discovery</h1>
+                <p>Análise profunda e descoberta de insights com IA avançada</p>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="container">
+                <div class="content-grid">
+                    <!-- Configuration Section -->
+                    <section class="config-section">
+                        <div class="section-header">
+                            <h2>Configuração da Análise</h2>
+                            <p>Configure os parâmetros para análise profunda</p>
+                        </div>
+                        
+                        <form id="deepdiveForm" class="post-form">
+                            <div class="form-group">
+                                <label for="razaoSocial">Razão Social *</label>
+                                <input type="text" id="razaoSocial" name="razaoSocial" placeholder="Digite a razão social da empresa" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="segmentoAtuacao">Segmento de Atuação *</label>
+                                <select id="segmentoAtuacao" name="segmentoAtuacao" required>
+                                    <option value="">Selecione o segmento</option>
+                                </select>
+                            </div>
+                            
+                            <button type="submit" class="submit-btn">
+                                <span>Iniciar Análise</span>
+                            </button>
+                        </form>
+                    </section>
+
+                    <!-- Results Section -->
+                    <section class="post-section">
+                        <div class="section-header">
+                            <h2>Resultados da Análise</h2>
+                            <p>Insights e descobertas aparecerão aqui</p>
+                        </div>
+                        
+                        <div id="loadingSpinner" class="loading-spinner" style="display: none;">
+                            <div class="spinner"></div>
+                            <p>Realizando análise profunda...</p>
+                        </div>
+                        
+                        <div id="emptyState" class="empty-state">
+                            <i class="fas fa-chart-line"></i>
+                            <p>Configure os parâmetros e clique em "Iniciar Análise" para obter insights profundos</p>
+                        </div>
+                        
+                        <div id="analysisResults" class="generated-post" style="display: none;"></div>
+                    </section>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Notification Container -->
+    <div id="notificationContainer" class="notification-container"></div>
+
+    <!-- Scripts -->
+    <script src="config.js"></script>
+    <script src="auth-check.js"></script>
+    <script>
+        // Script para a página Deepdive
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('deepdiveForm');
+            const loadingSpinner = document.getElementById('loadingSpinner');
+            const emptyState = document.getElementById('emptyState');
+            const analysisResults = document.getElementById('analysisResults');
+            
+            // Popular dropdown com segmentos
+            const segmentoSelect = document.getElementById('segmentoAtuacao');
+            LANDING_PAGE_CONFIG.options.targetSegment.forEach(segmento => {
+                const option = document.createElement('option');
+                option.value = segmento;
+                option.textContent = segmento;
+                segmentoSelect.appendChild(option);
+            });
+            
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                console.log('🚀 Iniciando análise Deepdive...');
+                
+                // Mostrar loading
+                loadingSpinner.style.display = 'block';
+                emptyState.style.display = 'none';
+                analysisResults.style.display = 'none';
+                
+                try {
+                    // Coletar dados do formulário
+                    const formData = {
+                        razaoSocial: document.getElementById('razaoSocial').value,
+                        segmentoAtuacao: document.getElementById('segmentoAtuacao').value
+                    };
+                    
+                    console.log('📋 Dados da análise:', formData);
+                    
+                    // Validar campos
+                    if (!formData.razaoSocial || !formData.segmentoAtuacao) {
+                        throw new Error('Por favor, preencha todos os campos obrigatórios.');
+                    }
+                    
+                    // Enviar para webhook específico do Deepdive
+                    console.log('📤 Enviando para webhook Deepdive...');
+                    
+                    const response = await fetch(LANDING_PAGE_CONFIG.deepdiveWebhookUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(formData)
+                    });
+                    
+                    console.log('📥 Status da resposta:', response.status);
+                    
+                    if (response.ok) {
+                        // Ler resposta apenas uma vez
+                        const responseText = await response.text();
+                        let responseData;
+                        
+                        try {
+                            responseData = JSON.parse(responseText);
+                            console.log('📄 Resposta JSON:', responseData);
+                        } catch (parseError) {
+                            responseData = { content: responseText };
+                            console.log('📄 Resposta como texto:', responseData);
+                        }
+                        
+                        // Exibir resultados
+                        displayAnalysisResults(responseData, formData);
+                        
+                    } else {
+                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    }
+                    
+                } catch (error) {
+                    console.error('❌ Erro na análise:', error);
+                    
+                    // Exibir erro
+                    analysisResults.style.display = 'block';
+                    analysisResults.innerHTML = `
+                        <div class="post-content">
+                            <h3>❌ Erro na Análise</h3>
+                            <p><strong>Erro:</strong> ${error.message}</p>
+                            <p>Verifique se o webhook está configurado corretamente.</p>
+                        </div>
+                    `;
+                } finally {
+                    loadingSpinner.style.display = 'none';
+                }
+            });
+            
+            function displayAnalysisResults(responseData, formData) {
+                // Determinar conteúdo da resposta
+                let content, metadata;
+                
+                if (responseData.analysis) {
+                    content = responseData.analysis.content || responseData.analysis;
+                    metadata = responseData.analysis.metadata || {};
+                } else if (responseData.success) {
+                    content = responseData.success.content || responseData.success;
+                    metadata = responseData.success.metadata || {};
+                } else if (typeof responseData === 'string') {
+                    content = responseData;
+                    metadata = {};
+                } else if (responseData.content) {
+                    content = responseData.content;
+                    metadata = responseData.metadata || {};
+                } else {
+                    // Se não encontrar estrutura específica, usar a resposta completa
+                    content = responseData;
+                    metadata = {};
+                }
+                
+                // Construir HTML dos resultados preservando a estrutura
+                let html = `
+                    <div class="post-content">
+                        <h3>Análise: ${formData.razaoSocial}</h3>
+                        <p><strong>Segmento:</strong> ${formData.segmentoAtuacao}</p>
+                        <div style="margin-top: 1.5rem;">
+                            <h4>Resultado da Análise:</h4>
+                            <div class="analysis-content">
+                `;
+                
+                // Preservar a estrutura original da resposta
+                if (typeof content === 'string') {
+                    // Se for string, preservar quebras de linha e formatação
+                    html += content.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                } else if (typeof content === 'object') {
+                    // Se for objeto, mostrar como JSON formatado
+                    html += JSON.stringify(content, null, 2).replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                } else {
+                    // Fallback
+                    html += String(content).replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                }
+                
+                html += `
+                            </div>
+                        </div>
+                `;
+                
+                // Adicionar metadados se existirem
+                if (metadata && Object.keys(metadata).length > 0) {
+                    html += `
+                        <div class="post-metadata">
+                            <h4>Metadados da Análise:</h4>
+                            <div style="margin-top: 1rem;">
+                                <pre style="background: #f5f5f5; padding: 1rem; border-radius: 4px; overflow-x: auto;">${JSON.stringify(metadata, null, 2)}</pre>
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                // Adicionar botões de ação
+                html += `
+                    <div class="post-actions">
+                        <button class="action-btn copy-btn" onclick="copyAnalysis()">
+                            Copiar Análise
+                        </button>
+                        <button class="action-btn download-btn" onclick="downloadAnalysis()">
+                            Baixar
+                        </button>
+                        <button class="action-btn regenerate-btn" onclick="regenerateAnalysis()">
+                            Nova Análise
+                        </button>
+                    </div>
+                </div>`;
+                
+                // Exibir resultados
+                analysisResults.innerHTML = html;
+                analysisResults.style.display = 'block';
+                
+                console.log('✅ Análise exibida com sucesso');
+            }
+            
+            // Funções globais para os botões
+            window.copyAnalysis = function() {
+                const analysisContent = document.querySelector('.post-content');
+                if (analysisContent) {
+                    navigator.clipboard.writeText(analysisContent.textContent).then(() => {
+                        showNotification('Análise copiada para a área de transferência!', 'success');
+                    }).catch(() => {
+                        showNotification('Erro ao copiar a análise', 'error');
+                    });
+                }
+            };
+            
+            window.downloadAnalysis = function() {
+                const analysisContent = document.querySelector('.post-content');
+                if (analysisContent) {
+                    const content = analysisContent.textContent;
+                    const blob = new Blob([content], { type: 'text/plain' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'analise-deepdive.txt';
+                    a.click();
+                    URL.revokeObjectURL(url);
+                    showNotification('Análise baixada com sucesso!', 'success');
+                }
+            };
+            
+            window.regenerateAnalysis = function() {
+                console.log('🔄 Regenerando análise...');
+                
+                // Limpar resultados atuais
+                analysisResults.style.display = 'none';
+                emptyState.style.display = 'block';
+                
+                // Re-enviar formulário
+                form.dispatchEvent(new Event('submit'));
+            };
+            
+            function showNotification(message, type = 'info') {
+                const notification = document.createElement('div');
+                notification.className = `notification ${type}`;
+                notification.textContent = message;
+                
+                const container = document.getElementById('notificationContainer');
+                if (container) {
+                    container.appendChild(notification);
+                    
+                    setTimeout(() => {
+                        notification.remove();
+                    }, 5000);
+                }
+            }
+        });
+    </script>
+</body>
+</html> 

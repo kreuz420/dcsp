@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Rápido - Erro 500</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .status {
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+        .status.error { background: #f8d7da; color: #721c24; }
+        .status.success { background: #d4edda; color: #155724; }
+        .status.warning { background: #fff3cd; color: #856404; }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 5px;
+            font-size: 16px;
+            width: 100%;
+        }
+        button:hover { background: #0056b3; }
+        .result {
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚨 Teste Rápido - Erro 500</h1>
+        
+        <div class="status error">
+            <h2>❌ Erro 500 Detectado</h2>
+            <p>Vamos diagnosticar e resolver rapidamente!</p>
+        </div>
+        
+        <button onclick="testWebhook()">🔍 Testar Webhook Agora</button>
+        <button onclick="testSimpleData()">🧪 Testar Dados Simples</button>
+        <button onclick="testMakeScenario()">⚙️ Verificar Cenário Make.com</button>
+        
+        <div id="result" class="result">Clique em um botão para começar o teste...</div>
+        
+        <div id="nextSteps" style="margin-top: 20px;"></div>
+    </div>
+
+    <script>
+        const webhookUrl = 'https://hook.us2.make.com/vd3tce9oprad7vv8eg165gouw7i8j4wn';
+        
+        function showResult(message, type = 'info') {
+            const resultDiv = document.getElementById('result');
+            const timestamp = new Date().toLocaleTimeString();
+            resultDiv.innerHTML += `[${timestamp}] ${message}\n`;
+            resultDiv.scrollTop = resultDiv.scrollHeight;
+        }
+        
+        function showNextSteps(steps) {
+            const stepsDiv = document.getElementById('nextSteps');
+            stepsDiv.innerHTML = `
+                <h3>📋 Próximos Passos:</h3>
+                <ol>
+                    ${steps.map(step => `<li>${step}</li>`).join('')}
+                </ol>
+            `;
+        }
+        
+        async function testWebhook() {
+            showResult('🔍 Testando status do webhook...');
+            
+            try {
+                const response = await fetch(webhookUrl, { 
+                    method: 'GET',
+                    headers: { 'Accept': 'application/json' }
+                });
+                
+                showResult(`📊 Status: ${response.status} ${response.statusText}`);
+                
+                if (response.status === 200) {
+                    showResult('✅ Webhook está ativo!', 'success');
+                    showNextSteps([
+                        'O webhook está funcionando',
+                        'O problema pode estar no cenário',
+                        'Execute o teste de dados simples'
+                    ]);
+                } else if (response.status === 500) {
+                    showResult('❌ Erro 500 confirmado - Webhook com problema', 'error');
+                    showNextSteps([
+                        'Acesse make.com e vá em "Scenarios"',
+                        'Encontre seu cenário e verifique se está ativo',
+                        'Clique em "Run once" para testar',
+                        'Verifique se há erros nos módulos'
+                    ]);
+                } else {
+                    showResult(`⚠️ Status inesperado: ${response.status}`, 'warning');
+                }
+                
+            } catch (error) {
+                showResult(`❌ Erro de conexão: ${error.message}`, 'error');
+                showNextSteps([
+                    'Verifique sua conexão com a internet',
+                    'Confirme se a URL do webhook está correta',
+                    'Tente novamente em alguns minutos'
+                ]);
+            }
+        }
+        
+        async function testSimpleData() {
+            showResult('🧪 Testando com dados simples...');
+            
+            const simpleData = {
+                executiveName: 'Teste',
+                targetSegment: 'tecnologia',
+                centralTheme: 'inovacao',
+                contextTrigger: 'Teste simples',
+                dominantEmotion: 'confianca',
+                callToAction: 'contato',
+                postType: 'educativo',
+                depthLevel: 'basico',
+                test: true
+            };
+            
+            try {
+                const response = await fetch(webhookUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(simpleData)
+                });
+                
+                showResult(`📥 Status: ${response.status} ${response.statusText}`);
+                
+                const responseText = await response.text();
+                
+                if (response.status === 500) {
+                    showResult('❌ Erro 500 com dados simples', 'error');
+                    showResult(`Resposta: ${responseText}`);
+                    showNextSteps([
+                        'O problema está no cenário do Make.com',
+                        'Acesse make.com e vá em "Executions"',
+                        'Procure pela execução mais recente',
+                        'Clique na execução para ver detalhes do erro',
+                        'Verifique se o AI Agent está configurado'
+                    ]);
+                } else if (response.ok) {
+                    showResult('✅ Dados simples funcionaram!', 'success');
+                    showResult(`Resposta: ${responseText}`);
+                    showNextSteps([
+                        'O webhook está funcionando',
+                        'Teste agora com dados completos na landing page',
+                        'Se ainda der erro, verifique os dados enviados'
+                    ]);
+                } else {
+                    showResult(`⚠️ Status: ${response.status}`, 'warning');
+                    showResult(`Resposta: ${responseText}`);
+                }
+                
+            } catch (error) {
+                showResult(`❌ Erro: ${error.message}`, 'error');
+            }
+        }
+        
+        function testMakeScenario() {
+            showResult('⚙️ Verificando cenário no Make.com...');
+            showResult('📋 Passos para verificar:');
+            showResult('1. Acesse make.com e faça login');
+            showResult('2. Vá em "Scenarios"');
+            showResult('3. Encontre seu cenário');
+            showResult('4. Verifique se está ativo (toggle verde)');
+            showResult('5. Clique no cenário para abri-lo');
+            showResult('6. Clique em "Run once" (botão play)');
+            showResult('7. Verifique se executa sem erro');
+            
+            showNextSteps([
+                'Abra make.com em outra aba',
+                'Siga os passos listados acima',
+                'Se o cenário não executar, há um problema de configuração',
+                'Se executar mas der erro 500, verifique os módulos',
+                'Verifique se o AI Agent está configurado corretamente'
+            ]);
+        }
+        
+        // Inicialização
+        window.onload = function() {
+            showResult('🚀 Teste rápido iniciado');
+            showResult(`🔗 Webhook: ${webhookUrl}`);
+            showResult('💡 Clique em "Testar Webhook Agora" para começar');
+        };
+    </script>
+</body>
+</html> 

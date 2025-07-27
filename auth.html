@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DCSP - Acesso Restrito</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Acesso restrito às ferramentas de IA da DCSP">
+    <meta name="keywords" content="DCSP, acesso, login, ferramentas IA">
+    <meta name="author" content="DCSP">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="styles.css">
+    
+    <style>
+        .auth-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #012774 0%, #007FAA 100%);
+            padding: 2rem;
+        }
+        
+        .auth-card {
+            background: #FFFFFF;
+            border-radius: 12px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            padding: 3rem;
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        .auth-logo {
+            margin-bottom: 2rem;
+        }
+        
+        .auth-logo h1 {
+            color: #012774;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .auth-logo p {
+            color: #696969;
+            font-size: 1rem;
+        }
+        
+        .auth-form {
+            text-align: left;
+        }
+        
+        .auth-form .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .auth-form label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #2E2E2E;
+            font-weight: 600;
+        }
+        
+        .auth-form input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #E4E4E4;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+        
+        .auth-form input:focus {
+            outline: none;
+            border-color: #012774;
+            box-shadow: 0 0 0 3px rgba(1, 39, 116, 0.1);
+        }
+        
+        .auth-btn {
+            width: 100%;
+            padding: 0.75rem;
+            background: linear-gradient(135deg, #012774, #007FAA);
+            color: #FFFFFF;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+        
+        .auth-btn:hover {
+            background: linear-gradient(135deg, #0138A7, #00A5DD);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(1, 39, 116, 0.3);
+        }
+        
+        .auth-btn:active {
+            background: linear-gradient(135deg, #011E5B, #005977);
+            transform: translateY(0);
+        }
+        
+        .auth-error {
+            background: #BF4C4A;
+            color: #FFFFFF;
+            padding: 0.75rem;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+        
+        .auth-success {
+            background: #7AB800;
+            color: #FFFFFF;
+            padding: 0.75rem;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+        
+        .auth-info {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: #F8F8F8;
+            border-radius: 6px;
+            border-left: 4px solid #007FAA;
+        }
+        
+        .auth-info h4 {
+            color: #012774;
+            margin-bottom: 0.5rem;
+        }
+        
+        .auth-info p {
+            color: #696969;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        
+        @media (max-width: 480px) {
+            .auth-card {
+                padding: 2rem;
+                margin: 1rem;
+            }
+            
+            .auth-logo h1 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-logo">
+                <h1>DCSP</h1>
+                <p>Ferramentas de IA - Acesso Restrito</p>
+            </div>
+            
+            <div id="authError" class="auth-error">
+                <i class="fas fa-exclamation-triangle"></i>
+                <span id="errorMessage">Senha incorreta. Tente novamente.</span>
+            </div>
+            
+            <div id="authSuccess" class="auth-success">
+                <i class="fas fa-check-circle"></i>
+                <span>Acesso autorizado! Redirecionando...</span>
+            </div>
+            
+            <form id="authForm" class="auth-form">
+                <div class="form-group">
+                    <label for="password">Senha de Acesso</label>
+                    <input type="password" id="password" name="password" placeholder="Digite a senha" required>
+                </div>
+                
+                <button type="submit" class="auth-btn">
+                    <i class="fas fa-unlock"></i>
+                    Acessar Ferramentas
+                </button>
+            </form>
+            
+            <div class="auth-info">
+                <h4><i class="fas fa-info-circle"></i> Informações</h4>
+                <p>Este é um ambiente restrito da DCSP. Apenas usuários autorizados podem acessar as ferramentas de IA.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuração da senha (ALTERE AQUI)
+        const ACCESS_PASSWORD = 'dcsp2024';
+        
+        // Verificar se já está autenticado
+        function checkAuth() {
+            const isAuthenticated = sessionStorage.getItem('dcspAuthenticated');
+            if (isAuthenticated === 'true') {
+                redirectToMain();
+            }
+        }
+        
+        // Autenticação
+        document.getElementById('authForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const password = document.getElementById('password').value;
+            const errorDiv = document.getElementById('authError');
+            const successDiv = document.getElementById('authSuccess');
+            const errorMessage = document.getElementById('errorMessage');
+            
+            // Limpar mensagens anteriores
+            errorDiv.style.display = 'none';
+            successDiv.style.display = 'none';
+            
+            if (password === ACCESS_PASSWORD) {
+                // Senha correta
+                sessionStorage.setItem('dcspAuthenticated', 'true');
+                sessionStorage.setItem('authTimestamp', Date.now().toString());
+                
+                successDiv.style.display = 'block';
+                errorMessage.textContent = '';
+                
+                // Redirecionar após 1 segundo
+                setTimeout(() => {
+                    redirectToMain();
+                }, 1000);
+                
+            } else {
+                // Senha incorreta
+                errorDiv.style.display = 'block';
+                errorMessage.textContent = 'Senha incorreta. Tente novamente.';
+                document.getElementById('password').value = '';
+                document.getElementById('password').focus();
+            }
+        });
+        
+        // Redirecionar para página principal
+        function redirectToMain() {
+            window.location.href = 'index.html';
+        }
+        
+        // Verificar autenticação ao carregar
+        checkAuth();
+        
+        // Foco no campo de senha
+        document.getElementById('password').focus();
+        
+        // Permitir acesso com Enter
+        document.getElementById('password').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('authForm').dispatchEvent(new Event('submit'));
+            }
+        });
+    </script>
+</body>
+</html> 

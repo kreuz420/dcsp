@@ -1,0 +1,669 @@
+/* Reset e configurações básicas */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: linear-gradient(135deg, #012774 0%, #007FAA 100%);
+    color: #2E2E2E;
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 280px;
+    background: #FFFFFF;
+    box-shadow: 2px 0 20px rgba(1, 39, 116, 0.1);
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    height: 100vh;
+    z-index: 1000;
+}
+
+.sidebar-header {
+    padding: 2rem 1.5rem 1rem;
+    border-bottom: 1px solid #E4E4E4;
+    text-align: center;
+}
+
+.sidebar-header h2 {
+    color: #012774;
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.sidebar-header p {
+    color: #696969;
+    font-size: 0.9rem;
+}
+
+.sidebar-menu {
+    list-style: none;
+    padding: 1rem 0;
+    flex: 1;
+}
+
+.menu-item {
+    margin: 0.25rem 1rem;
+}
+
+.menu-item a {
+    display: flex;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    color: #696969;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.menu-item a:hover {
+    background: #F8F8F8;
+    color: #012774;
+}
+
+.menu-item.active a {
+    background: linear-gradient(135deg, #012774, #007FAA);
+    color: #FFFFFF;
+}
+
+.menu-item i {
+    margin-right: 1rem;
+    font-size: 1.1rem;
+    width: 20px;
+    text-align: center;
+}
+
+.sidebar-footer {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid #E4E4E4;
+    text-align: center;
+}
+
+.sidebar-footer p {
+    color: #9B9B9B;
+    font-size: 0.8rem;
+}
+
+/* Main Wrapper */
+.main-wrapper {
+    flex: 1;
+    margin-left: 280px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Header */
+.header {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 2rem 0;
+    text-align: center;
+    box-shadow: 0 2px 20px rgba(1, 39, 116, 0.1);
+}
+
+.header h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #012774;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.02em;
+}
+
+.header p {
+    font-size: 1.1rem;
+    color: #696969;
+    font-weight: 400;
+}
+
+/* Main Content */
+.main-content {
+    padding: 3rem 0;
+    flex: 1;
+}
+
+.content-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    align-items: start;
+}
+
+/* Sections */
+.config-section,
+.post-section {
+    background: #FFFFFF;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 8px 32px rgba(1, 39, 116, 0.1);
+    border: 2px solid #E4E4E4;
+    position: relative;
+    overflow: hidden;
+}
+
+.config-section::before,
+.post-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #012774, #007FAA);
+}
+
+/* Section Headers */
+.section-header {
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.section-header h2 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #012774;
+    margin-bottom: 0.5rem;
+}
+
+.section-header p {
+    color: #696969;
+    font-size: 1rem;
+}
+
+/* Form Styles */
+.post-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-group label {
+    font-weight: 500;
+    color: #2E2E2E;
+    font-size: 0.95rem;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    padding: 0.75rem 1rem;
+    border: 2px solid #E4E4E4;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: #FFFFFF;
+    color: #2E2E2E;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #012774;
+    box-shadow: 0 0 0 3px rgba(1, 39, 116, 0.1);
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: #9B9B9B;
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+/* Submit Button */
+.submit-btn {
+    background: linear-gradient(135deg, #012774, #007FAA);
+    color: #FFFFFF;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(1, 39, 116, 0.3);
+    margin-top: 1rem;
+}
+
+.submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(1, 39, 116, 0.4);
+    background: linear-gradient(135deg, #0138A7, #00A5DD);
+}
+
+.submit-btn:active {
+    transform: translateY(0);
+    background: linear-gradient(135deg, #011E5B, #005977);
+}
+
+.submit-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Loading Spinner */
+.loading-spinner {
+    text-align: center;
+    padding: 2rem;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #E4E4E4;
+    border-top: 4px solid #012774;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 1rem;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loading-spinner p {
+    color: #696969;
+    font-size: 1rem;
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 3rem 2rem;
+    color: #696969;
+}
+
+.empty-state i {
+    font-size: 3rem;
+    color: #C0C0C0;
+    margin-bottom: 1rem;
+}
+
+.empty-state p {
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+/* Generated Post */
+.generated-post {
+    background: #F8F8F8;
+    border-radius: 12px;
+    padding: 2rem;
+    border-left: 4px solid #012774;
+}
+
+.post-content h3 {
+    color: #012774;
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.post-content p {
+    color: #2E2E2E;
+    font-size: 1rem;
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+    white-space: pre-wrap;
+}
+
+.post-metadata {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #E4E4E4;
+}
+
+.metadata-item {
+    background: #FFFFFF;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    color: #696969;
+    border: 1px solid #E4E4E4;
+}
+
+.post-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.action-btn {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.copy-btn {
+    background: #007FAA;
+    color: #FFFFFF;
+}
+
+.copy-btn:hover {
+    background: #00A5DD;
+}
+
+.download-btn {
+    background: #7AB800;
+    color: #FFFFFF;
+}
+
+.download-btn:hover {
+    background: #8BC34A;
+}
+
+.regenerate-btn {
+    background: #F0A800;
+    color: #FFFFFF;
+}
+
+.regenerate-btn:hover {
+    background: #FFB74D;
+}
+
+/* Notifications */
+.notification-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.notification {
+    background: #FFFFFF;
+    border-radius: 8px;
+    padding: 1rem 1.5rem;
+    margin-bottom: 0.5rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    border-left: 4px solid;
+    animation: slideIn 0.3s ease;
+    max-width: 400px;
+}
+
+.notification.success {
+    border-left-color: #7AB800;
+}
+
+.notification.error {
+    border-left-color: #BF4C4A;
+}
+
+.notification.warning {
+    border-left-color: #F0A800;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .sidebar {
+        width: 240px;
+    }
+    
+    .main-wrapper {
+        margin-left: 240px;
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        flex-direction: column;
+    }
+    
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+    }
+    
+    .main-wrapper {
+        margin-left: 0;
+    }
+    
+    .content-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .header h1 {
+        font-size: 2rem;
+    }
+    
+    .header p {
+        font-size: 1rem;
+    }
+    
+    .config-section,
+    .post-section {
+        padding: 1.5rem;
+    }
+    
+    .section-header h2 {
+        font-size: 1.5rem;
+    }
+    
+    .submit-btn {
+        padding: 0.875rem 1.5rem;
+        font-size: 1rem;
+    }
+    
+    .post-actions {
+        flex-direction: column;
+    }
+    
+    .action-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 0 15px;
+    }
+    
+    .header {
+        padding: 1.5rem 0;
+    }
+    
+    .header h1 {
+        font-size: 1.75rem;
+    }
+    
+    .main-content {
+        padding: 2rem 0;
+    }
+    
+    .config-section,
+    .post-section {
+        padding: 1rem;
+    }
+    
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        padding: 0.625rem 0.875rem;
+    }
+    
+    .sidebar-menu {
+        display: flex;
+        overflow-x: auto;
+        padding: 1rem;
+    }
+    
+    .menu-item {
+        margin: 0 0.5rem 0 0;
+        flex-shrink: 0;
+    }
+    
+    .menu-item a {
+        padding: 0.75rem 1rem;
+        white-space: nowrap;
+    }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Focus styles for accessibility */
+button:focus,
+input:focus,
+select:focus,
+textarea:focus {
+    outline: 2px solid #012774;
+    outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .config-section,
+    .post-section {
+        border: 2px solid #000000;
+    }
+    
+    .submit-btn {
+        border: 2px solid #000000;
+    }
+} 
+
+/* Estilos para preservar formatação da resposta */
+.post-content pre {
+    background: #f5f5f5;
+    padding: 1rem;
+    border-radius: 4px;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    border: 1px solid #e0e0e0;
+}
+
+.post-content .analysis-content {
+    white-space: pre-wrap;
+    font-family: inherit;
+    line-height: 1.6;
+    background: #fafafa;
+    padding: 1rem;
+    border-radius: 4px;
+    border-left: 4px solid #012774;
+    margin: 1rem 0;
+}
+
+.post-content .analysis-content h1,
+.post-content .analysis-content h2,
+.post-content .analysis-content h3,
+.post-content .analysis-content h4,
+.post-content .analysis-content h5,
+.post-content .analysis-content h6 {
+    color: #012774;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.post-content .analysis-content ul,
+.post-content .analysis-content ol {
+    margin-left: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.post-content .analysis-content li {
+    margin-bottom: 0.5rem;
+}
+
+.post-content .analysis-content p {
+    margin-bottom: 1rem;
+}
+
+.post-content .analysis-content strong,
+.post-content .analysis-content b {
+    color: #012774;
+    font-weight: 600;
+}
+
+.post-content .analysis-content em,
+.post-content .analysis-content i {
+    color: #007FAA;
+    font-style: italic;
+}
+
+.post-content .analysis-content code {
+    background: #f0f0f0;
+    padding: 0.2rem 0.4rem;
+    border-radius: 3px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9em;
+}
+
+.post-content .analysis-content blockquote {
+    border-left: 4px solid #007FAA;
+    padding-left: 1rem;
+    margin: 1rem 0;
+    font-style: italic;
+    color: #696969;
+}
+
+/* Responsividade para conteúdo de análise */
+@media (max-width: 768px) {
+    .post-content .analysis-content {
+        padding: 0.75rem;
+        font-size: 0.9rem;
+    }
+    
+    .post-content pre {
+        padding: 0.75rem;
+        font-size: 0.8rem;
+    }
+} 

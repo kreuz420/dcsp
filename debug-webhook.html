@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Webhook - Agente I.A</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .debug-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .success { border-color: #28a745; background: #d4edda; }
+        .error { border-color: #dc3545; background: #f8d7da; }
+        .info { border-color: #17a2b8; background: #d1ecf1; }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 5px;
+            font-size: 16px;
+        }
+        button:hover { background: #0056b3; }
+        .code {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            margin: 10px 0;
+            white-space: pre-wrap;
+            font-size: 12px;
+        }
+        .log {
+            max-height: 300px;
+            overflow-y: auto;
+            background: #000;
+            color: #0f0;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Debug Webhook - Agente I.A</h1>
+        <p>Esta página ajuda a diagnosticar por que os dados não estão chegando no webhook.</p>
+        
+        <div class="debug-section info">
+            <h3>📋 Webhook Configurado</h3>
+            <p><strong>URL:</strong> https://hook.us2.make.com/vd3tce9oprad7vv8eg165gouw7i8j4wn</p>
+            <p><strong>Status:</strong> <span id="webhookStatus">Verificando...</span></p>
+        </div>
+        
+        <div class="debug-section">
+            <h3>🧪 Testes de Diagnóstico</h3>
+            <button onclick="testWebhookStatus()">1. Verificar Status do Webhook</button>
+            <button onclick="testSimpleRequest()">2. Teste Simples</button>
+            <button onclick="testWithFormData()">3. Teste com Dados do Formulário</button>
+            <button onclick="testCORS()">4. Teste CORS</button>
+            <button onclick="clearLog()">Limpar Log</button>
+        </div>
+        
+        <div class="debug-section">
+            <h3>📊 Log de Testes</h3>
+            <div id="debugLog" class="log"></div>
+        </div>
+        
+        <div class="debug-section">
+            <h3>🔧 Dados de Teste</h3>
+            <div id="testData" class="code"></div>
+        </div>
+        
+        <div class="debug-section">
+            <h3>📝 Resposta do Webhook</h3>
+            <div id="webhookResponse" class="code"></div>
+        </div>
+        
+        <div class="debug-section info">
+            <h3>💡 Próximos Passos</h3>
+            <ol>
+                <li>Execute os testes na ordem (1, 2, 3, 4)</li>
+                <li>Verifique se o webhook está ativo no Make.com</li>
+                <li>Confirme se o cenário está rodando</li>
+                <li>Verifique os logs de execução no Make.com</li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        const webhookUrl = 'https://hook.us2.make.com/vd3tce9oprad7vv8eg165gouw7i8j4wn';
+        
+        function log(message, type = 'info') {
+            const logDiv = document.getElementById('debugLog');
+            const timestamp = new Date().toLocaleTimeString();
+            const color = type === 'error' ? '#ff6b6b' : type === 'success' ? '#51cf66' : '#74c0fc';
+            logDiv.innerHTML += `<div style="color: ${color}">[${timestamp}] ${message}</div>`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+        
+        function clearLog() {
+            document.getElementById('debugLog').innerHTML = '';
+            document.getElementById('testData').innerHTML = '';
+            document.getElementById('webhookResponse').innerHTML = '';
+        }
+        
+        async function testWebhookStatus() {
+            log('🔄 Verificando status do webhook...');
+            
+            try {
+                const response = await fetch(webhookUrl, {
+                    method: 'GET'
+                });
+                
+                log(`📊 Status: ${response.status} ${response.statusText}`, 'success');
+                
+                if (response.status === 200) {
+                    document.getElementById('webhookStatus').innerHTML = '✅ Ativo';
+                    log('✅ Webhook está ativo e respondendo', 'success');
+                } else if (response.status === 404) {
+                    document.getElementById('webhookStatus').innerHTML = '❌ Não encontrado';
+                    log('❌ Webhook não encontrado - verifique a URL', 'error');
+                } else if (response.status === 410) {
+                    document.getElementById('webhookStatus').innerHTML = '❌ Desativado';
+                    log('❌ Webhook desativado - reative no Make.com', 'error');
+                } else {
+                    document.getElementById('webhookStatus').innerHTML = `⚠️ Status ${response.status}`;
+                    log(`⚠️ Status inesperado: ${response.status}`, 'error');
+                }
+                
+            } catch (error) {
+                document.getElementById('webhookStatus').innerHTML = '❌ Erro de conexão';
+                log(`❌ Erro de conexão: ${error.message}`, 'error');
+            }
+        }
+        
+        async function testSimpleRequest() {
+            log('🔄 Enviando teste simples...');
+            
+            const simpleData = {
+                test: true,
+                timestamp: new Date().toISOString(),
+                message: 'Teste simples do webhook'
+            };
+            
+            document.getElementById('testData').innerHTML = JSON.stringify(simpleData, null, 2);
+            
+            try {
+                const response = await fetch(webhookUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(simpleData)
+                });
+                
+                log(`📊 Resposta: ${response.status} ${response.statusText}`, 'success');
+                
+                const responseText = await response.text();
+                document.getElementById('webhookResponse').innerHTML = responseText;
+                
+                if (response.ok) {
+                    log('✅ Teste simples bem-sucedido!', 'success');
+                } else {
+                    log(`❌ Erro na resposta: ${response.status}`, 'error');
+                }
+                
+            } catch (error) {
+                log(`❌ Erro no teste: ${error.message}`, 'error');
+                document.getElementById('webhookResponse').innerHTML = `Erro: ${error.message}`;
+            }
+        }
+        
+        async function testWithFormData() {
+            log('🔄 Enviando dados completos do formulário...');
+            
+            const formData = {
+                executiveName: 'João Silva',
+                targetSegment: 'tecnologia',
+                centralTheme: 'inovacao',
+                contextTrigger: 'Teste de debug para verificar se os dados estão chegando no webhook do Make.com.',
+                dominantEmotion: 'confianca',
+                callToAction: 'contato',
+                postType: 'educativo',
+                depthLevel: 'intermediario',
+                timestamp: new Date().toISOString(),
+                userAgent: navigator.userAgent,
+                debug: true,
+                testId: Math.random().toString(36).substr(2, 9)
+            };
+            
+            document.getElementById('testData').innerHTML = JSON.stringify(formData, null, 2);
+            
+            try {
+                log('📤 Enviando dados...');
+                
+                const response = await fetch(webhookUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                log(`📊 Resposta: ${response.status} ${response.statusText}`, 'success');
+                
+                const responseText = await response.text();
+                document.getElementById('webhookResponse').innerHTML = responseText;
+                
+                if (response.ok) {
+                    log('✅ Dados enviados com sucesso!', 'success');
+                    log('💡 Verifique se apareceu no Make.com', 'info');
+                } else {
+                    log(`❌ Erro na resposta: ${response.status}`, 'error');
+                }
+                
+            } catch (error) {
+                log(`❌ Erro no envio: ${error.message}`, 'error');
+                document.getElementById('webhookResponse').innerHTML = `Erro: ${error.message}`;
+                
+                if (error.message.includes('CORS')) {
+                    log('💡 Dica: Use o proxy CORS ou configure CORS no Make.com', 'info');
+                }
+            }
+        }
+        
+        async function testCORS() {
+            log('🔄 Testando CORS...');
+            
+            try {
+                const response = await fetch(webhookUrl, {
+                    method: 'OPTIONS',
+                    headers: {
+                        'Origin': window.location.origin,
+                        'Access-Control-Request-Method': 'POST',
+                        'Access-Control-Request-Headers': 'Content-Type'
+                    }
+                });
+                
+                log(`📊 CORS Status: ${response.status}`, 'success');
+                
+                const corsHeaders = {
+                    'Access-Control-Allow-Origin': response.headers.get('Access-Control-Allow-Origin'),
+                    'Access-Control-Allow-Methods': response.headers.get('Access-Control-Allow-Methods'),
+                    'Access-Control-Allow-Headers': response.headers.get('Access-Control-Allow-Headers')
+                };
+                
+                Object.entries(corsHeaders).forEach(([header, value]) => {
+                    if (value) {
+                        log(`✅ ${header}: ${value}`, 'success');
+                    } else {
+                        log(`⚠️ ${header}: não encontrado`, 'error');
+                    }
+                });
+                
+            } catch (error) {
+                log(`❌ Erro CORS: ${error.message}`, 'error');
+            }
+        }
+        
+        // Inicialização
+        window.onload = function() {
+            log('🚀 Debug iniciado');
+            log(`🔗 Webhook: ${webhookUrl}`);
+            testWebhookStatus();
+        };
+    </script>
+</body>
+</html> 

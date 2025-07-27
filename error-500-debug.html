@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Erro 500 - Webhook</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .error-section {
+            background: #f8d7da;
+            border: 1px solid #dc3545;
+            border-radius: 5px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .warning-section {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 5px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .success-section {
+            background: #d4edda;
+            border: 1px solid #28a745;
+            border-radius: 5px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 5px;
+            font-size: 16px;
+        }
+        button:hover { background: #0056b3; }
+        button.danger { background: #dc3545; }
+        button.danger:hover { background: #c82333; }
+        button.success { background: #28a745; }
+        button.success:hover { background: #218838; }
+        .code {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            margin: 10px 0;
+            white-space: pre-wrap;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+        }
+        .log {
+            max-height: 400px;
+            overflow-y: auto;
+            background: #000;
+            color: #0f0;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        .error-log {
+            background: #000;
+            color: #ff6b6b;
+        }
+        .status {
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+        .status.error { background: #f8d7da; color: #721c24; }
+        .status.warning { background: #fff3cd; color: #856404; }
+        .status.success { background: #d4edda; color: #155724; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚨 Debug Erro 500 - Webhook Make.com</h1>
+        
+        <div class="error-section">
+            <h2>❌ Erro 500 Detectado</h2>
+            <p><strong>O que significa:</strong> Erro interno do servidor no Make.com</p>
+            <p><strong>Causas comuns:</strong></p>
+            <ul>
+                <li>Webhook inativo ou desativado</li>
+                <li>Cenário com erro de configuração</li>
+                <li>AI Agent não configurado corretamente</li>
+                <li>Módulos faltando ou com erro</li>
+                <li>Dados inválidos sendo enviados</li>
+            </ul>
+        </div>
+        
+        <div class="test-section">
+            <h3>🔧 Testes de Diagnóstico</h3>
+            <button onclick="testWebhookStatus()">1. Verificar Status do Webhook</button>
+            <button onclick="testSimpleRequest()">2. Teste Simples (GET)</button>
+            <button onclick="testMinimalData()">3. Teste Dados Mínimos</button>
+            <button onclick="testFullData()">4. Teste Dados Completos</button>
+            <button onclick="testInvalidData()">5. Teste Dados Inválidos</button>
+            <button onclick="clearAllLogs()">Limpar Logs</button>
+        </div>
+        
+        <div class="test-section">
+            <h3>📊 Log de Testes</h3>
+            <div id="debugLog" class="log"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>📤 Dados Enviados</h3>
+            <div id="sentData" class="code"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>📥 Resposta Recebida</h3>
+            <div id="receivedResponse" class="code"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>🔍 Análise do Erro</h3>
+            <div id="errorAnalysis" class="code"></div>
+        </div>
+        
+        <div class="warning-section">
+            <h3>⚠️ Soluções para Erro 500</h3>
+            <div id="solutions"></div>
+        </div>
+    </div>
+
+    <script>
+        const webhookUrl = 'https://hook.us2.make.com/vd3tce9oprad7vv8eg165gouw7i8j4wn';
+        
+        function log(message, type = 'info') {
+            const logDiv = document.getElementById('debugLog');
+            const timestamp = new Date().toLocaleTimeString();
+            const color = type === 'error' ? '#ff6b6b' : type === 'success' ? '#51cf66' : type === 'warning' ? '#ffd43b' : '#74c0fc';
+            logDiv.innerHTML += `<div style="color: ${color}">[${timestamp}] ${message}</div>`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+        
+        function clearAllLogs() {
+            document.getElementById('debugLog').innerHTML = '';
+            document.getElementById('sentData').innerHTML = '';
+            document.getElementById('receivedResponse').innerHTML = '';
+            document.getElementById('errorAnalysis').innerHTML = '';
+            document.getElementById('solutions').innerHTML = '';
+        }
+        
+        function analyzeError(status, responseText) {
+            let analysis = `Status: ${status}\n`;
+            let solutions = '';
+            
+            if (status === 500) {
+                analysis += '❌ Erro 500 - Erro interno do servidor\n\n';
+                analysis += 'Possíveis causas:\n';
+                analysis += '1. Webhook inativo/desativado\n';
+                analysis += '2. Cenário com erro de configuração\n';
+                analysis += '3. AI Agent não configurado\n';
+                analysis += '4. Módulos faltando\n';
+                analysis += '5. Dados inválidos\n\n';
+                
+                solutions = `
+                    <h4>🔧 Soluções para Erro 500:</h4>
+                    <ol>
+                        <li><strong>Verificar Make.com:</strong>
+                            <ul>
+                                <li>Acesse make.com e vá em "Scenarios"</li>
+                                <li>Encontre seu cenário e clique nele</li>
+                                <li>Verifique se está ativo (toggle verde)</li>
+                                <li>Clique em "Run once" para testar</li>
+                            </ul>
+                        </li>
+                        <li><strong>Verificar Webhook:</strong>
+                            <ul>
+                                <li>No cenário, clique no módulo webhook</li>
+                                <li>Verifique se está ativo</li>
+                                <li>Copie a URL novamente se necessário</li>
+                            </ul>
+                        </li>
+                        <li><strong>Verificar AI Agent:</strong>
+                            <ul>
+                                <li>Confirme se o AI Agent está configurado</li>
+                                <li>Verifique se tem créditos disponíveis</li>
+                                <li>Teste o prompt manualmente</li>
+                            </ul>
+                        </li>
+                        <li><strong>Verificar Execuções:</strong>
+                            <ul>
+                                <li>Vá em "Executions" no Make.com</li>
+                                <li>Procure por execuções com erro</li>
+                                <li>Clique na execução para ver detalhes</li>
+                            </ul>
+                        </li>
+                    </ol>
+                `;
+            } else if (status === 404) {
+                analysis += '❌ Erro 404 - Webhook não encontrado\n';
+                solutions = '<p><strong>Solução:</strong> Verificar se a URL do webhook está correta no Make.com</p>';
+            } else if (status === 403) {
+                analysis += '❌ Erro 403 - Acesso negado\n';
+                solutions = '<p><strong>Solução:</strong> Verificar permissões do webhook no Make.com</p>';
+            } else {
+                analysis += `❌ Erro ${status} - Erro desconhecido\n`;
+                solutions = '<p><strong>Solução:</strong> Verificar logs do Make.com para mais detalhes</p>';
+            }
+            
+            if (responseText) {
+                analysis += `\nResposta do servidor:\n${responseText}`;
+            }
+            
+            document.getElementById('errorAnalysis').innerHTML = analysis;
+            document.getElementById('solutions').innerHTML = solutions;
+        }
+        
+        async function testWebhookStatus() {
+            log('🔍 Verificando status do webhook...');
+            
+            try {
+                const response = await fetch(webhookUrl, { 
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                log(`📊 Status: ${response.status} ${response.statusText}`);
+                
+                if (response.status === 200) {
+                    log('✅ Webhook está ativo e respondendo', 'success');
+                } else if (response.status === 404) {
+                    log('❌ Webhook não encontrado (404)', 'error');
+                } else if (response.status === 500) {
+                    log('❌ Erro interno do servidor (500)', 'error');
+                } else {
+                    log(`⚠️ Status inesperado: ${response.status}`, 'warning');
+                }
+                
+                const responseText = await response.text();
+                document.getElementById('receivedResponse').innerHTML = responseText || '(Resposta vazia)';
+                
+            } catch (error) {
+                log(`❌ Erro de conexão: ${error.message}`, 'error');
+                document.getElementById('receivedResponse').innerHTML = `Erro: ${error.message}`;
+            }
+        }
+        
+        async function testSimpleRequest() {
+            log('🔄 Testando requisição simples...');
+            
+            const simpleData = { test: true, timestamp: new Date().toISOString() };
+            document.getElementById('sentData').innerHTML = JSON.stringify(simpleData, null, 2);
+            
+            try {
+                const response = await fetch(webhookUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(simpleData)
+                });
+                
+                log(`📥 Status: ${response.status} ${response.statusText}`);
+                
+                const responseText = await response.text();
+                document.getElementById('receivedResponse').innerHTML = responseText || '(Resposta vazia)';
+                
+                if (response.status === 500) {
+                    log('❌ Erro 500 confirmado', 'error');
+                    analyzeError(500, responseText);
+                } else if (response.ok) {
+                    log('✅ Requisição simples funcionou', 'success');
+                } else {
+                    log(`⚠️ Status inesperado: ${response.status}`, 'warning');
+                    analyzeError(response.status, responseText);
+                }
+                
+            } catch (error) {
+                log(`❌ Erro: ${error.message}`, 'error');
+                document.getElementById('receivedResponse').innerHTML = `Erro: ${error.message}`;
+            }
+        }
+        
+        async function testMinimalData() {
+            log('🔄 Testando dados mínimos...');
+            
+            const minimalData = {
+                executiveName: 'Teste',
+                targetSegment: 'tecnologia',
+                centralTheme: 'inovacao',
+                contextTrigger: 'Teste mínimo',
+                dominantEmotion: 'confianca',
+                callToAction: 'contato',
+                postType: 'educativo',
+                depthLevel: 'basico'
+            };
+            
+            document.getElementById('sentData').innerHTML = JSON.stringify(minimalData, null, 2);
+            
+            try {
+                const response = await fetch(webhookUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(minimalData)
+                });
+                
+                log(`📥 Status: ${response.status} ${response.statusText}`);
+                
+                const responseText = await response.text();
+                document.getElementById('receivedResponse').innerHTML = responseText || '(Resposta vazia)';
+                
+                if (response.status === 500) {
+                    log('❌ Erro 500 com dados mínimos', 'error');
+                    analyzeError(500, responseText);
+                } else if (response.ok) {
+                    log('✅ Dados mínimos funcionaram', 'success');
+                } else {
+                    log(`⚠️ Status: ${response.status}`, 'warning');
+                    analyzeError(response.status, responseText);
+                }
+                
+            } catch (error) {
+                log(`❌ Erro: ${error.message}`, 'error');
+                document.getElementById('receivedResponse').innerHTML = `Erro: ${error.message}`;
+            }
+        }
+        
+        async function testFullData() {
+            log('🔄 Testando dados completos...');
+            
+            const fullData = {
+                executiveName: 'João Silva',
+                targetSegment: 'tecnologia',
+                centralTheme: 'inovacao',
+                contextTrigger: 'Nova regulamentação do setor de tecnologia que afeta diretamente nossos clientes e requer adaptação imediata dos processos internos.',
+                dominantEmotion: 'confianca',
+                callToAction: 'contato',
+                postType: 'educativo',
+                depthLevel: 'intermediario',
+                timestamp: new Date().toISOString(),
+                userAgent: navigator.userAgent,
+                test: true
+            };
+            
+            document.getElementById('sentData').innerHTML = JSON.stringify(fullData, null, 2);
+            
+            try {
+                const response = await fetch(webhookUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(fullData)
+                });
+                
+                log(`📥 Status: ${response.status} ${response.statusText}`);
+                
+                const responseText = await response.text();
+                document.getElementById('receivedResponse').innerHTML = responseText || '(Resposta vazia)';
+                
+                if (response.status === 500) {
+                    log('❌ Erro 500 com dados completos', 'error');
+                    analyzeError(500, responseText);
+                } else if (response.ok) {
+                    log('✅ Dados completos funcionaram', 'success');
+                } else {
+                    log(`⚠️ Status: ${response.status}`, 'warning');
+                    analyzeError(response.status, responseText);
+                }
+                
+            } catch (error) {
+                log(`❌ Erro: ${error.message}`, 'error');
+                document.getElementById('receivedResponse').innerHTML = `Erro: ${error.message}`;
+            }
+        }
+        
+        async function testInvalidData() {
+            log('🔄 Testando dados inválidos...');
+            
+            const invalidData = {
+                executiveName: '', // Campo vazio
+                targetSegment: 'valor_invalido',
+                centralTheme: null, // Valor null
+                contextTrigger: 'A'.repeat(10000), // Texto muito longo
+                dominantEmotion: 'emotion_inexistente',
+                callToAction: undefined, // Undefined
+                postType: 123, // Número em vez de string
+                depthLevel: {} // Objeto em vez de string
+            };
+            
+            document.getElementById('sentData').innerHTML = JSON.stringify(invalidData, null, 2);
+            
+            try {
+                const response = await fetch(webhookUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(invalidData)
+                });
+                
+                log(`📥 Status: ${response.status} ${response.statusText}`);
+                
+                const responseText = await response.text();
+                document.getElementById('receivedResponse').innerHTML = responseText || '(Resposta vazia)';
+                
+                if (response.status === 500) {
+                    log('❌ Erro 500 com dados inválidos (esperado)', 'warning');
+                    analyzeError(500, responseText);
+                } else if (response.ok) {
+                    log('✅ Dados inválidos foram aceitos (inesperado)', 'warning');
+                } else {
+                    log(`⚠️ Status: ${response.status}`, 'warning');
+                    analyzeError(response.status, responseText);
+                }
+                
+            } catch (error) {
+                log(`❌ Erro: ${error.message}`, 'error');
+                document.getElementById('receivedResponse').innerHTML = `Erro: ${error.message}`;
+            }
+        }
+        
+        // Inicialização
+        window.onload = function() {
+            log('🚀 Debug de Erro 500 iniciado');
+            log(`🔗 Webhook: ${webhookUrl}`);
+            log('💡 Execute os testes na ordem para diagnosticar o problema');
+        };
+    </script>
+</body>
+</html> 

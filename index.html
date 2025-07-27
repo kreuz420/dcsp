@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DCSP - Gerador de Posts Inteligente</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Transforme insights em conteúdo profissional para LinkedIn com IA avançada da DCSP. Gere posts personalizados e impactantes.">
+    <meta name="keywords" content="DCSP, gerador de posts, IA, LinkedIn, conteúdo profissional, automação, marketing digital">
+    <meta name="author" content="DCSP">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="DCSP - Gerador de Posts Inteligente">
+    <meta property="og:description" content="Transforme insights em conteúdo profissional para LinkedIn com IA avançada da DCSP.">
+    <meta property="og:type" content="website">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Sidebar Menu -->
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <h2>DCSP</h2>
+            <p>Ferramentas IA</p>
+        </div>
+        
+        <ul class="sidebar-menu">
+            <li class="menu-item active">
+                <a href="index.html">
+                    <i class="fas fa-edit"></i>
+                    <span>Criador de Posts</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="deepdive.html">
+                    <i class="fas fa-search"></i>
+                    <span>Deepdive + Discovery</span>
+                </a>
+            </li>
+        </ul>
+        
+        <div class="sidebar-footer">
+            <p>© 2024 DCSP</p>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <div class="main-wrapper">
+        <!-- Header -->
+        <header class="header">
+            <div class="container">
+                <h1>Criador de Posts</h1>
+                <p>Transforme insights em conteúdo profissional para LinkedIn com IA avançada</p>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="container">
+                <div class="content-grid">
+                    <!-- Configuration Section -->
+                    <section class="config-section">
+                        <div class="section-header">
+                            <h2>Configuração do Post</h2>
+                            <p>Preencha os campos abaixo para gerar um post personalizado</p>
+                        </div>
+                        
+                        <form id="postForm" class="post-form">
+                            <div class="form-group">
+                                <label for="executiveName">Nome do Executivo *</label>
+                                <input type="text" id="executiveName" name="executiveName" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="targetSegment">Segmento de Atuação *</label>
+                                <select id="targetSegment" name="targetSegment" required>
+                                    <option value="">Selecione o segmento</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="centralTheme">Tema Central *</label>
+                                <select id="centralTheme" name="centralTheme" required>
+                                    <option value="">Selecione o tema</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="contextTrigger">Contexto ou Gatilho *</label>
+                                <textarea id="contextTrigger" name="contextTrigger" rows="3" required></textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="dominantEmotion">Emoção Dominante *</label>
+                                <select id="dominantEmotion" name="dominantEmotion" required>
+                                    <option value="">Selecione a emoção</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="callToAction">Call to Action *</label>
+                                <select id="callToAction" name="callToAction" required>
+                                    <option value="">Selecione o CTA</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="postType">Tipo de Post *</label>
+                                <select id="postType" name="postType" required>
+                                    <option value="">Selecione o tipo</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="depthLevel">Nível de Profundidade *</label>
+                                <select id="depthLevel" name="depthLevel" required>
+                                    <option value="">Selecione o nível</option>
+                                </select>
+                            </div>
+                            
+                            <button type="submit" class="submit-btn">
+                                <span id="submitButtonText">Gerar Post</span>
+                            </button>
+                        </form>
+                    </section>
+
+                    <!-- Generated Post Section -->
+                    <section class="post-section">
+                        <div class="section-header">
+                            <h2>Post Gerado</h2>
+                            <p>Seu conteúdo personalizado aparecerá aqui</p>
+                        </div>
+                        
+                        <div id="loadingSpinner" class="loading-spinner" style="display: none;">
+                            <div class="spinner"></div>
+                            <p id="loadingMessage">Gerando seu post personalizado...</p>
+                        </div>
+                        
+                        <div id="emptyState" class="empty-state">
+                            <i class="fas fa-file-alt"></i>
+                            <p>Preencha o formulário e clique em "Gerar Post" para criar seu conteúdo personalizado</p>
+                        </div>
+                        
+                        <div id="generatedPost" class="generated-post" style="display: none;"></div>
+                    </section>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Notification Container -->
+    <div id="notificationContainer" class="notification-container"></div>
+
+    <!-- Scripts -->
+    <script src="config.js"></script>
+    <script src="auth-check.js"></script>
+    <script src="script.js"></script>
+</body>
+</html> 

@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Simples - Gerador de Posts</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .form-group {
+            margin: 15px 0;
+        }
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        button {
+            background: #012774;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background: #0138A7;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            display: none;
+        }
+        .success {
+            background: #e8f5e8;
+            border: 1px solid #4caf50;
+        }
+        .error {
+            background: #ffebee;
+            border: 1px solid #f44336;
+        }
+        .loading {
+            text-align: center;
+            padding: 20px;
+            display: none;
+        }
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #012774;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Teste Simples - Gerador de Posts</h1>
+        
+        <form id="simpleForm">
+            <div class="form-group">
+                <label>Nome do Executivo:</label>
+                <input type="text" id="executiveName" value="João Silva" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Segmento:</label>
+                <select id="targetSegment" required>
+                    <option value="">Selecione...</option>
+                    <option value="Tecnologia" selected>Tecnologia</option>
+                    <option value="Saúde">Saúde</option>
+                    <option value="Finanças">Finanças</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Tema Central:</label>
+                <select id="centralTheme" required>
+                    <option value="">Selecione...</option>
+                    <option value="Inovação" selected>Inovação</option>
+                    <option value="Tendências">Tendências</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Contexto:</label>
+                <textarea id="contextTrigger" rows="3" required>Nova tecnologia disruptiva no mercado</textarea>
+            </div>
+            
+            <div class="form-group">
+                <label>Emoção:</label>
+                <select id="dominantEmotion" required>
+                    <option value="">Selecione...</option>
+                    <option value="Confiança" selected>Confiança</option>
+                    <option value="Entusiasmo">Entusiasmo</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Call to Action:</label>
+                <select id="callToAction" required>
+                    <option value="">Selecione...</option>
+                    <option value="Entre em Contato" selected>Entre em Contato</option>
+                    <option value="Agende uma Reunião">Agende uma Reunião</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Tipo de Post:</label>
+                <select id="postType" required>
+                    <option value="">Selecione...</option>
+                    <option value="Educativo" selected>Educativo</option>
+                    <option value="Promocional">Promocional</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Nível:</label>
+                <select id="depthLevel" required>
+                    <option value="">Selecione...</option>
+                    <option value="Básico" selected>Básico</option>
+                    <option value="Intermediário">Intermediário</option>
+                </select>
+            </div>
+            
+            <button type="submit">Gerar Post</button>
+        </form>
+        
+        <div id="loading" class="loading">
+            <div class="spinner"></div>
+            <p>Gerando post...</p>
+        </div>
+        
+        <div id="result" class="result"></div>
+    </div>
+
+    <script>
+        const WEBHOOK_URL = 'https://hook.us2.make.com/vd3tce9oprad7vv8eg165gouw7i8j4wn';
+        
+        document.getElementById('simpleForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            console.log('🚀 Iniciando teste simples...');
+            
+            // Mostrar loading
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('result').style.display = 'none';
+            
+            try {
+                // Coletar dados
+                const formData = {
+                    executiveName: document.getElementById('executiveName').value,
+                    targetSegment: document.getElementById('targetSegment').value,
+                    centralTheme: document.getElementById('centralTheme').value,
+                    contextTrigger: document.getElementById('contextTrigger').value,
+                    dominantEmotion: document.getElementById('dominantEmotion').value,
+                    callToAction: document.getElementById('callToAction').value,
+                    postType: document.getElementById('postType').value,
+                    depthLevel: document.getElementById('depthLevel').value
+                };
+                
+                console.log('📋 Dados:', formData);
+                
+                // Validar campos
+                for (const [key, value] of Object.entries(formData)) {
+                    if (!value || value.trim() === '') {
+                        throw new Error(`Campo obrigatório não preenchido: ${key}`);
+                    }
+                }
+                
+                console.log('✅ Validação aprovada');
+                
+                // Enviar para webhook
+                console.log('📤 Enviando para webhook...');
+                
+                const response = await fetch(WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                console.log('📥 Status:', response.status);
+                
+                if (response.ok) {
+                    // CORREÇÃO: Ler o corpo da resposta apenas UMA vez
+                    const responseText = await response.text();
+                    let responseData;
+                    
+                    try {
+                        responseData = JSON.parse(responseText);
+                        console.log('📄 Resposta JSON:', responseData);
+                    } catch (parseError) {
+                        responseData = responseText;
+                        console.log('📄 Resposta texto:', responseData);
+                    }
+                    
+                    // Exibir resultado
+                    const resultDiv = document.getElementById('result');
+                    resultDiv.className = 'result success';
+                    resultDiv.innerHTML = `
+                        <h3>✅ Post Gerado com Sucesso!</h3>
+                        <p><strong>Conteúdo:</strong></p>
+                        <pre>${JSON.stringify(responseData, null, 2)}</pre>
+                    `;
+                    resultDiv.style.display = 'block';
+                    
+                } else {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+            } catch (error) {
+                console.error('❌ Erro:', error);
+                
+                const resultDiv = document.getElementById('result');
+                resultDiv.className = 'result error';
+                resultDiv.innerHTML = `
+                    <h3>❌ Erro na Geração</h3>
+                    <p><strong>Erro:</strong> ${error.message}</p>
+                    <p>Verifique o console para mais detalhes.</p>
+                `;
+                resultDiv.style.display = 'block';
+            } finally {
+                document.getElementById('loading').style.display = 'none';
+            }
+        });
+        
+        console.log('🔧 Teste simples carregado');
+        console.log('🌐 Webhook URL:', WEBHOOK_URL);
+    </script>
+</body>
+</html> 

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Webhook - Agente I.A</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 5px;
+            font-size: 16px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            white-space: pre-wrap;
+            font-family: monospace;
+            font-size: 14px;
+        }
+        .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .info { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+        .loading { background: #fff3cd; color: #856404; border: 1px solid #ffeaa7; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Teste de Webhook - Agente I.A</h1>
+        <p>Esta página testa especificamente a conexão com o webhook do Make.com.</p>
+        
+        <div>
+            <button onclick="testSimple()">Teste Simples</button>
+            <button onclick="testWithData()">Teste com Dados</button>
+            <button onclick="testCORS()">Teste CORS</button>
+            <button onclick="clearResults()">Limpar Resultados</button>
+        </div>
+        
+        <div id="results"></div>
+    </div>
+
+    <script src="config.js"></script>
+    <script>
+        const webhookUrl = 'https://hook.us2.make.com/vd3tce9oprad7vv8eg165gouw7i8j4wn';
+        
+        function addResult(message, type = 'info') {
+            const results = document.getElementById('results');
+            const div = document.createElement('div');
+            div.className = `result ${type}`;
+            div.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            results.appendChild(div);
+            results.scrollTop = results.scrollHeight;
+        }
+        
+        function clearResults() {
+            document.getElementById('results').innerHTML = '';
+        }
+        
+        async function testSimple() {
+            addResult('🔄 Iniciando teste simples...', 'loading');
+            
+            try {
+                const response = await fetch(webhookUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({test: 'simple'})
+                });
+                
+                addResult(`✅ Status: ${response.status} ${response.statusText}`, 'success');
+                
+                if (response.ok) {
+                    const text = await response.text();
+                    addResult(`📄 Resposta: ${text.substring(0, 200)}...`, 'info');
+                }
+                
+            } catch (error) {
+                addResult(`❌ Erro: ${error.message}`, 'error');
+            }
+        }
+        
+        async function testWithData() {
+            addResult('🔄 Iniciando teste com dados completos...', 'loading');
+            
+            const testData = {
+                executiveName: 'João Silva',
+                targetSegment: 'tecnologia',
+                centralTheme: 'inovacao',
+                contextTrigger: 'Teste de webhook com dados completos para verificar se o agente está funcionando corretamente.',
+                dominantEmotion: 'confianca',
+                callToAction: 'contato',
+                postType: 'educativo',
+                depthLevel: 'intermediario',
+                timestamp: new Date().toISOString(),
+                userAgent: navigator.userAgent,
+                test: true
+            };
+            
+            try {
+                const response = await fetch(webhookUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(testData)
+                });
+                
+                addResult(`✅ Status: ${response.status} ${response.statusText}`, 'success');
+                
+                if (response.ok) {
+                    try {
+                        const data = await response.json();
+                        addResult(`📄 Resposta JSON: ${JSON.stringify(data, null, 2)}`, 'info');
+                    } catch (e) {
+                        const text = await response.text();
+                        addResult(`📄 Resposta texto: ${text.substring(0, 200)}...`, 'info');
+                    }
+                }
+                
+            } catch (error) {
+                addResult(`❌ Erro: ${error.message}`, 'error');
+                
+                if (error.message.includes('CORS')) {
+                    addResult('💡 Dica: Este é um erro de CORS. Veja o arquivo troubleshooting.md', 'info');
+                }
+            }
+        }
+        
+        async function testCORS() {
+            addResult('🔄 Testando CORS...', 'loading');
+            
+            try {
+                const response = await fetch(webhookUrl, {
+                    method: 'OPTIONS',
+                    headers: {
+                        'Origin': window.location.origin,
+                        'Access-Control-Request-Method': 'POST',
+                        'Access-Control-Request-Headers': 'Content-Type'
+                    }
+                });
+                
+                addResult(`✅ CORS Status: ${response.status}`, 'success');
+                
+                const corsHeaders = {
+                    'Access-Control-Allow-Origin': response.headers.get('Access-Control-Allow-Origin'),
+                    'Access-Control-Allow-Methods': response.headers.get('Access-Control-Allow-Methods'),
+                    'Access-Control-Allow-Headers': response.headers.get('Access-Control-Allow-Headers')
+                };
+                
+                Object.entries(corsHeaders).forEach(([header, value]) => {
+                    if (value) {
+                        addResult(`✅ ${header}: ${value}`, 'success');
+                    } else {
+                        addResult(`⚠️ ${header}: não encontrado`, 'error');
+                    }
+                });
+                
+            } catch (error) {
+                addResult(`❌ Erro CORS: ${error.message}`, 'error');
+            }
+        }
+        
+        // Informações iniciais
+        addResult('🚀 Teste de Webhook iniciado', 'info');
+        addResult(`🔗 URL: ${webhookUrl}`, 'info');
+        addResult('💡 Clique nos botões acima para testar diferentes aspectos', 'info');
+    </script>
+</body>
+</html> 
