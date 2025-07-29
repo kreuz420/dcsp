@@ -3,8 +3,8 @@
 
 const LANDING_PAGE_CONFIG = {
     // Configurações básicas
-    title: "DCSP - Gerador de Posts Inteligente",
-    subtitle: "Transforme insights em conteúdo profissional para LinkedIn com IA avançada",
+    title: "DCSP - Gerador de Sugestões de Posts",
+    subtitle: "Transforme insights em sugestões de conteúdo profissional para LinkedIn",
     
     // URL do webhook
     webhookUrl: "https://hook.us2.make.com/vd3tce9oprad7vv8eg165gouw7i8j4wn",
@@ -130,26 +130,26 @@ const LANDING_PAGE_CONFIG = {
     texts: {
         placeholders: {
             executiveName: "Digite o nome do executivo",
-            contextTrigger: "Descreva o contexto ou gatilho que inspirou este post"
+            contextTrigger: "Descreva o contexto, gatilho ou copie o link da matéria que inspirou este post"
         },
         buttons: {
-            submit: "Gerar Post"
+            submit: "Gerar a Sugestão do Post"
         },
         messages: {
-            loading: "Gerando seu post personalizado...",
+            loading: "Gerando sua sugestão de post personalizado...",
             validationError: "Por favor, preencha todos os campos obrigatórios.",
-            success: "Post gerado com sucesso!",
+            success: "Sugestão de Post gerado com sucesso!",
             error: "Erro ao gerar o post. Tente novamente.",
-            copied: "Post copiado para a área de transferência!",
-            downloaded: "Post baixado com sucesso!"
+            copied: "Sugestão de Post copiada para a área de transferência!",
+            downloaded: "Sugestão de Post baixado com sucesso!"
         }
     },
     
     // Configurações de SEO
     seo: {
-        title: "DCSP - Gerador de Posts Inteligente | IA para LinkedIn",
-        description: "Transforme insights em conteúdo profissional para LinkedIn com IA avançada da DCSP. Gere posts personalizados e impactantes.",
-        keywords: "DCSP, gerador de posts, IA, LinkedIn, conteúdo profissional, automação, marketing digital",
+        title: "DCSP - Gerador de Sugestão de Posts | IA para LinkedIn",
+        description: "Transforme insights em sugestões de conteúdo profissional para LinkedIn com IA avançada da DCSP. Gere sugestões de posts personalizados e impactantes.",
+        keywords: "DCSP, gerador de sugestões de posts, IA, LinkedIn, conteúdo profissional, automação, marketing digital",
         author: "DCSP"
     }
 };
