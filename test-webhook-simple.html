@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Simples Webhook</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .test-section {
+            background: #f9f9f9;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+        button {
+            background: #DA291C;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #E63946;
+        }
+        .result {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            white-space: pre-wrap;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        .success { background: #d4edda; border: 1px solid #c3e6cb; }
+        .error { background: #f8d7da; border: 1px solid #f5c6cb; }
+    </style>
+</head>
+<body>
+    <h1>🔧 Teste de Webhooks</h1>
+    
+    <div class="test-section">
+        <h3>1. Teste Cold Messager</h3>
+        <button onclick="testColdMessage()">Testar Cold Messager</button>
+        <div id="result1" class="result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h3>2. Teste Criador de Posts</h3>
+        <button onclick="testPostCreator()">Testar Criador de Posts</button>
+        <div id="result2" class="result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h3>3. Teste Deepdive</h3>
+        <button onclick="testDeepdive()">Testar Deepdive</button>
+        <div id="result3" class="result"></div>
+    </div>
+
+    <script>
+        const WEBHOOKS = {
+            coldmessage: "https://hook.us2.make.com/v869wy7klg85j2685oudrx825w8qvevs",
+            posts: "https://hook.us2.make.com/vd3tce9oprad7vv8eg165gouw7i8j4wn",
+            deepdive: "https://hook.us2.make.com/cnrxdj1jqrddvoavj47jn9qnwqm34om0"
+        };
+
+        async function testWebhook(url, data, resultId) {
+            const resultDiv = document.getElementById(resultId);
+            resultDiv.textContent = 'Testando...';
+            resultDiv.className = 'result';
+            
+            try {
+                console.log(`🌐 Testando: ${url}`);
+                console.log(`📦 Dados:`, data);
+                
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                const responseText = await response.text();
+                
+                console.log(`📥 Status: ${response.status}`);
+                console.log(`📄 Resposta: ${responseText}`);
+                
+                if (response.ok) {
+                    resultDiv.className = 'result success';
+                    resultDiv.textContent = `✅ SUCESSO!\nStatus: ${response.status}\nResposta: ${responseText}`;
+                } else {
+                    resultDiv.className = 'result error';
+                    resultDiv.textContent = `❌ ERRO!\nStatus: ${response.status}\nResposta: ${responseText}`;
+                }
+                
+            } catch (error) {
+                console.error('❌ Erro:', error);
+                resultDiv.className = 'result error';
+                resultDiv.textContent = `❌ ERRO DE REDE!\n${error.message}`;
+            }
+        }
+
+        function testColdMessage() {
+            const data = {
+                executivoVenda: "João Silva",
+                empresa: "Empresa Teste",
+                segmento: "Tecnologia, Media e Comunicação",
+                persona: "CFO",
+                prioridade_da_oferta: "D&O",
+                hipotese_de_dor: "Proteção contra riscos diretores",
+                palavras_chave_de_noticias: "tecnologia, inovação",
+                canal: "email",
+                framework_copy: "AIDA",
+                cta_tipo: "agenda direta"
+            };
+            
+            testWebhook(WEBHOOKS.coldmessage, data, 'result1');
+        }
+
+        function testPostCreator() {
+            const data = {
+                executiveName: "João Silva",
+                targetSegment: "Tecnologia, Media e Comunicação",
+                centralTheme: "Inovação",
+                contextTrigger: "Teste de webhook",
+                dominantEmotion: "Confiança",
+                callToAction: "Comentário",
+                postType: "Educativo",
+                depthLevel: "Intermediário"
+            };
+            
+            testWebhook(WEBHOOKS.posts, data, 'result2');
+        }
+
+        function testDeepdive() {
+            const data = {
+                razaoSocial: "Empresa Teste LTDA",
+                segmentoAtuacao: "Tecnologia, Media e Comunicação"
+            };
+            
+            testWebhook(WEBHOOKS.deepdive, data, 'result3');
+        }
+    </script>
+</body>
+</html> 

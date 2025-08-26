@@ -4,7 +4,7 @@
     
     // Verificar autenticação
     function checkAuthentication() {
-        const isAuthenticated = sessionStorage.getItem('dcspAuthenticated');
+        const isAuthenticated = sessionStorage.getItem('growthCopilotAuthenticated');
         const authTimestamp = sessionStorage.getItem('authTimestamp');
         
         // Se não está autenticado, redirecionar para login
@@ -21,7 +21,7 @@
             
             if (sessionTime > maxSessionTime) {
                 // Sessão expirada
-                sessionStorage.removeItem('dcspAuthenticated');
+                sessionStorage.removeItem('growthCopilotAuthenticated');
                 sessionStorage.removeItem('authTimestamp');
                 redirectToAuth();
                 return false;
@@ -74,7 +74,7 @@
     
     // Função de logout
     window.logout = function() {
-        sessionStorage.removeItem('dcspAuthenticated');
+        sessionStorage.removeItem('growthCopilotAuthenticated');
         sessionStorage.removeItem('authTimestamp');
         window.location.href = 'auth.html';
     };
