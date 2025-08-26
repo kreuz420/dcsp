@@ -3,7 +3,7 @@
 
 const LANDING_PAGE_CONFIG = {
     // Configurações básicas
-    title: "DCSP - Gerador de Sugestões de Posts",
+    title: "Growth Copilot - Gerador de Posts Inteligente",
     subtitle: "Transforme insights em sugestões de conteúdo profissional para LinkedIn",
     
     // URL do webhook
@@ -12,26 +12,27 @@ const LANDING_PAGE_CONFIG = {
     // URL do webhook para Deepdive
     deepdiveWebhookUrl: "https://hook.us2.make.com/cnrxdj1jqrddvoavj47jn9qnwqm34om0",
     
+    // URL do webhook para Coldmessage
+    coldmessageWebhookUrl: "https://hook.us2.make.com/v869wy7klg85j2685oudrx825w8qvevs",
+    
     // Validação dos campos
     validation: {
-        required: ['executiveName', 'targetSegment', 'centralTheme', 'contextTrigger', 'dominantEmotion', 'callToAction', 'postType', 'depthLevel']
+        required: ['executiveName', 'targetSegment', 'centralTheme', 'contextTrigger', 'dominantEmotion', 'callToAction', 'postType', 'depthLevel'],
+        coldmessage: ['executivoVenda', 'empresa', 'segmento', 'persona', 'prioridade_da_oferta', 'hipotese_de_dor', 'canal', 'cta_tipo']
     },
     
-    // Paleta de cores oficial da DCSP
+    // Paleta de cores da Aon
     colors: {
-        // Azuis principais
-        primary: '#012774',           // Blue (100%) - headlines e UI
-        primaryHover: '#0138A7',      // Blue Lighter 10% - hover
-        primaryActive: '#011E5B',     // Blue Darker 5% - active
-        midnight: '#001135',          // Midnight - fundos profundos
+        // Vermelho principal da Aon
+        primary: '#DA291C',           // Aon Red - headlines e UI
+        primaryHover: '#E63946',      // Aon Red Lighter - hover
+        primaryActive: '#B71C1C',     // Aon Red Darker - active
+        midnight: '#1A1A1A',          // Midnight - fundos profundos
         
-        // Teal para links e modernidade
-        teal: '#007FAA',              // Teal (100%) - links e UI moderna
-        tealHover: '#00A5DD',         // Teal Lighter 10% - hover
-        tealActive: '#005977',        // Teal Darker 10% - active
-        
-        // Aqua para dados e ilustrações
-        aqua: '#4CBAEB',              // Aqua/Bright Blue (100%)
+        // Tons complementares
+        secondary: '#FF6B6B',         // Vermelho secundário
+        secondaryHover: '#FF8E8E',    // Vermelho secundário hover
+        secondaryActive: '#E55555',   // Vermelho secundário active
         
         // Cinzas neutros
         grayA: '#2E2E2E',             // Gray A (100%) - texto principal e títulos
@@ -52,7 +53,7 @@ const LANDING_PAGE_CONFIG = {
         success: '#7AB800',           // Success - confirmações positivas
         
         // Cores de fundo e texto
-        background: 'linear-gradient(135deg, #012774 0%, #007FAA 100%)',
+        background: 'linear-gradient(135deg, #DA291C 0%, #FF6B6B 100%)',
         text: '#2E2E2E',
         textLight: '#696969',
         white: '#FFFFFF',
@@ -147,10 +148,10 @@ const LANDING_PAGE_CONFIG = {
     
     // Configurações de SEO
     seo: {
-        title: "DCSP - Gerador de Sugestão de Posts | IA para LinkedIn",
-        description: "Transforme insights em sugestões de conteúdo profissional para LinkedIn com IA avançada da DCSP. Gere sugestões de posts personalizados e impactantes.",
-        keywords: "DCSP, gerador de sugestões de posts, IA, LinkedIn, conteúdo profissional, automação, marketing digital",
-        author: "DCSP"
+        title: "Growth Copilot - Gerador de Sugestão de Posts | IA para LinkedIn",
+        description: "Transforme insights em sugestões de conteúdo profissional para LinkedIn com IA avançada do Growth Copilot. Gere sugestões de posts personalizados e impactantes.",
+        keywords: "Growth Copilot, gerador de sugestões de posts, IA, LinkedIn, conteúdo profissional, automação, marketing digital",
+        author: "Growth Copilot"
     }
 };
 

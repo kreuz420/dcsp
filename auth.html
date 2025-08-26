@@ -2,16 +2,21 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DCSP - Acesso Restrito</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Growth Copilot - Acesso Restrito</title>
     
     <!-- SEO Meta Tags -->
-    <meta name="description" content="Acesso restrito às ferramentas de IA da DCSP">
-    <meta name="keywords" content="DCSP, acesso, login, ferramentas IA">
-    <meta name="author" content="DCSP">
+    <meta name="description" content="Acesso restrito às ferramentas de IA do Growth Copilot">
+    <meta name="keywords" content="Growth Copilot, acesso, login, ferramentas IA">
+    <meta name="author" content="Growth Copilot">
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- CSS -->
     <link rel="stylesheet" href="styles.css">
@@ -22,18 +27,35 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, #012774 0%, #007FAA 100%);
+            background: linear-gradient(135deg, #DA291C 0%, #B71C1C 100%);
             padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .auth-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="50" cy="10" r="0.5" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.3;
         }
         
         .auth-card {
             background: #FFFFFF;
-            border-radius: 12px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
             padding: 3rem;
             max-width: 400px;
             width: 100%;
             text-align: center;
+            position: relative;
+            z-index: 2;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
         }
         
         .auth-logo {
@@ -41,9 +63,11 @@
         }
         
         .auth-logo h1 {
-            color: #012774;
+            color: #DA291C;
             font-size: 2rem;
             margin-bottom: 0.5rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
         }
         
         .auth-logo p {
@@ -78,28 +102,45 @@
         
         .auth-form input:focus {
             outline: none;
-            border-color: #012774;
-            box-shadow: 0 0 0 3px rgba(1, 39, 116, 0.1);
+            border-color: #DA291C;
+            box-shadow: 0 0 0 3px rgba(218, 41, 28, 0.1);
         }
         
         .auth-btn {
             width: 100%;
-            padding: 0.75rem;
-            background: linear-gradient(135deg, #012774, #007FAA);
+            padding: 1rem;
+            background: linear-gradient(135deg, #DA291C, #FF6B6B);
             color: #FFFFFF;
             border: none;
-            border-radius: 6px;
+            border-radius: 12px;
             font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
             margin-top: 1rem;
+            position: relative;
+            overflow: hidden;
         }
         
         .auth-btn:hover {
-            background: linear-gradient(135deg, #0138A7, #00A5DD);
+            background: linear-gradient(135deg, #E63946, #FF8E8E);
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(1, 39, 116, 0.3);
+            box-shadow: 0 8px 20px rgba(218, 41, 28, 0.3);
+        }
+        
+        .auth-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .auth-btn:hover::before {
+            left: 100%;
         }
         
         .auth-btn:active {
@@ -130,11 +171,11 @@
             padding: 1rem;
             background: #F8F8F8;
             border-radius: 6px;
-            border-left: 4px solid #007FAA;
+            border-left: 4px solid #DA291C;
         }
         
         .auth-info h4 {
-            color: #012774;
+            color: #DA291C;
             margin-bottom: 0.5rem;
         }
         
@@ -160,7 +201,8 @@
     <div class="auth-container">
         <div class="auth-card">
             <div class="auth-logo">
-                <h1>DCSP</h1>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Aon_Corporation_logo.svg/1200px-Aon_Corporation_logo.svg.png" alt="Growth Copilot" style="width: 120px; height: auto; margin-bottom: 1rem;">
+                <h1>Growth Copilot</h1>
                 <p>Ferramentas de IA - Acesso Restrito</p>
             </div>
             
@@ -188,18 +230,18 @@
             
             <div class="auth-info">
                 <h4><i class="fas fa-info-circle"></i> Informações</h4>
-                <p>Este é um ambiente restrito da DCSP. Apenas usuários autorizados podem acessar as ferramentas de IA.</p>
+                <p>Este é um ambiente restrito do Growth Copilot. Apenas usuários autorizados podem acessar as ferramentas de IA.</p>
             </div>
         </div>
     </div>
 
     <script>
         // Configuração da senha (ALTERE AQUI)
-        const ACCESS_PASSWORD = 'dcsp2024';
+        const ACCESS_PASSWORD = 'growth2025';
         
         // Verificar se já está autenticado
         function checkAuth() {
-            const isAuthenticated = sessionStorage.getItem('dcspAuthenticated');
+            const isAuthenticated = sessionStorage.getItem('growthCopilotAuthenticated');
             if (isAuthenticated === 'true') {
                 redirectToMain();
             }
@@ -220,7 +262,7 @@
             
             if (password === ACCESS_PASSWORD) {
                 // Senha correta
-                sessionStorage.setItem('dcspAuthenticated', 'true');
+                sessionStorage.setItem('growthCopilotAuthenticated', 'true');
                 sessionStorage.setItem('authTimestamp', Date.now().toString());
                 
                 successDiv.style.display = 'block';

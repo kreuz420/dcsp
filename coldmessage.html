@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Growth Copilot - Cold Messager</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Ferramenta de cold message com IA avançada do Growth Copilot.">
+    <meta name="keywords" content="Growth Copilot, cold message, IA, LinkedIn, prospecção, automação">
+    <meta name="author" content="Growth Copilot">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Growth Copilot - Cold Messager">
+    <meta property="og:description" content="Ferramenta de cold message com IA avançada do Growth Copilot.">
+    <meta property="og:type" content="website">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Sidebar Menu -->
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Aon_Corporation_logo.svg/1200px-Aon_Corporation_logo.svg.png" alt="Growth Copilot" style="width: 120px; height: auto; margin-bottom: 1rem;">
+            <h2>Growth Copilot</h2>
+            <p>Ferramentas IA</p>
+        </div>
+        
+        <ul class="sidebar-menu">
+            <li class="menu-item">
+                <a href="index.html">
+                    <i class="fas fa-edit"></i>
+                    <span>Criador de Posts</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="deepdive.html">
+                    <i class="fas fa-search"></i>
+                    <span>Deepdive + Discovery</span>
+                </a>
+            </li>
+            <li class="menu-item active">
+                <a href="coldmessage.html">
+                    <i class="fas fa-envelope"></i>
+                    <span>Cold Messager</span>
+                </a>
+            </li>
+        </ul>
+        
+        <div class="sidebar-footer">
+            <p>© 2024 Growth Copilot</p>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <div class="main-wrapper">
+        <!-- Header -->
+        <header class="header">
+            <div class="container">
+                <div class="header-content">
+                    <div class="header-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <h1>Cold Messager</h1>
+                    <p>Gere mensagens personalizadas para prospecção com IA avançada</p>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="container">
+                <div class="content-grid">
+                    <!-- Configuration Section -->
+                    <section class="config-section">
+                        <div class="section-header">
+                            <h2>Configuração da Mensagem</h2>
+                            <p>Preencha os campos abaixo para gerar uma cold message personalizada</p>
+                        </div>
+                        
+                        <form id="coldmessageForm" class="post-form">
+                            <div class="form-group">
+                                <label for="executivoVenda">Executivo de Venda *</label>
+                                <input type="text" id="executivoVenda" name="executivoVenda" placeholder="Digite seu nome completo" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="empresa">Empresa *</label>
+                                <input type="text" id="empresa" name="empresa" placeholder="Digite o nome da empresa" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="segmento">Segmento *</label>
+                                <select id="segmento" name="segmento" required>
+                                    <option value="">Selecione o segmento</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="persona">Persona *</label>
+                                <input type="text" id="persona" name="persona" placeholder="Ex: CFO, Diretor de Riscos/Seguros, Jurídico, Compras, RH/Benefícios" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="prioridade_da_oferta">Prioridade da Oferta *</label>
+                                <input type="text" id="prioridade_da_oferta" name="prioridade_da_oferta" placeholder="Ex: Seguro Garantia Judicial, D&O, Crédito, Saúde Corporativa, Programa de Riscos Operacionais, Projeto consultivo" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="hipotese_de_dor">Hipótese de Dor *</label>
+                                <textarea id="hipotese_de_dor" name="hipotese_de_dor" rows="3" placeholder="Descreva brevemente a hipótese de dor do cliente" required></textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="palavras_chave_de_noticias">Palavras-chave de Notícias <span style="color: #696969; font-size: 0.9rem;">(opcional)</span></label>
+                                <textarea id="palavras_chave_de_noticias" name="palavras_chave_de_noticias" rows="2" placeholder="Ex: tecnologia, inovação, sustentabilidade (separadas por vírgula)"></textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="canal">Canal *</label>
+                                <select id="canal" name="canal" required>
+                                    <option value="">Selecione o canal</option>
+                                    <option value="email">Email</option>
+                                    <option value="InMail">InMail</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="framework_copy">Framework Copy <span style="color: #696969; font-size: 0.9rem;">(opcional)</span></label>
+                                <select id="framework_copy" name="framework_copy">
+                                    <option value="">Selecione o framework (opcional)</option>
+                                    <option value="AIDA">AIDA - Attention, Interest, Desire, Action</option>
+                                    <option value="PAS">PAS - Problem, Agitation, Solution</option>
+                                    <option value="PASTOR">PASTOR - Problem, Amplify, Story, Testimony, Offer, Response</option>
+                                    <option value="3 Razões">3 Razões - Três Razões para Agir</option>
+                                    <option value="ABT">ABT - And, But, Therefore</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="cta_tipo">Tipo de CTA *</label>
+                                <select id="cta_tipo" name="cta_tipo" required>
+                                    <option value="">Selecione o tipo de CTA</option>
+                                    <option value="agenda direta">Agenda direta</option>
+                                    <option value="diagnóstico rápido">Diagnóstico rápido</option>
+                                    <option value="envio de material">Envio de material</option>
+                                </select>
+                            </div>
+                            
+                            <button type="submit" class="submit-btn">
+                                <span id="submitButtonText">Gerar Cold Message</span>
+                            </button>
+                        </form>
+                    </section>
+
+                    <!-- Generated Message Section -->
+                    <section class="post-section">
+                        <div class="section-header">
+                            <h2>Cold Message Gerada</h2>
+                            <p>Sua mensagem personalizada aparecerá aqui</p>
+                        </div>
+                        
+                        <div id="loadingSpinner" class="loading-spinner" style="display: none;">
+                            <div class="spinner"></div>
+                            <p id="loadingMessage">Gerando sua cold message personalizada...</p>
+                        </div>
+                        
+                        <div id="emptyState" class="empty-state">
+                            <i class="fas fa-envelope"></i>
+                            <p>Preencha o formulário e clique em "Gerar Cold Message" para criar sua mensagem personalizada</p>
+                        </div>
+                        
+                        <div id="generatedMessage" class="generated-post" style="display: none;"></div>
+                    </section>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Notification Container -->
+    <div id="notificationContainer" class="notification-container"></div>
+
+    <!-- Scripts -->
+    <script src="config.js"></script>
+    <script src="auth-check.js"></script>
+    <script>
+        // Script para a página Coldmessage
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('coldmessageForm');
+            const loadingSpinner = document.getElementById('loadingSpinner');
+            const emptyState = document.getElementById('emptyState');
+            const generatedMessage = document.getElementById('generatedMessage');
+            const submitButtonText = document.getElementById('submitButtonText');
+            
+            // Popular dropdown com segmentos
+            const segmentoSelect = document.getElementById('segmento');
+            LANDING_PAGE_CONFIG.options.targetSegment.forEach(segmento => {
+                const option = document.createElement('option');
+                option.value = segmento;
+                option.textContent = segmento;
+                segmentoSelect.appendChild(option);
+            });
+            
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                console.log('🚀 Iniciando geração de cold message...');
+                
+                // Mostrar loading
+                loadingSpinner.style.display = 'block';
+                emptyState.style.display = 'none';
+                generatedMessage.style.display = 'none';
+                submitButtonText.textContent = 'Gerando...';
+                
+                try {
+                    // Coletar dados do formulário
+                    const formData = {
+                        executivoVenda: document.getElementById('executivoVenda').value,
+                        empresa: document.getElementById('empresa').value,
+                        segmento: document.getElementById('segmento').value,
+                        persona: document.getElementById('persona').value,
+                        prioridade_da_oferta: document.getElementById('prioridade_da_oferta').value,
+                        hipotese_de_dor: document.getElementById('hipotese_de_dor').value,
+                        palavras_chave_de_noticias: document.getElementById('palavras_chave_de_noticias').value,
+                        canal: document.getElementById('canal').value,
+                        framework_copy: document.getElementById('framework_copy').value,
+                        cta_tipo: document.getElementById('cta_tipo').value
+                    };
+                    
+                    console.log('📋 Dados da cold message:', formData);
+                    
+                    // Validar campos obrigatórios
+                    const camposObrigatorios = ['executivoVenda', 'empresa', 'segmento', 'persona', 'prioridade_da_oferta', 'hipotese_de_dor', 'canal', 'cta_tipo'];
+                    const camposVazios = camposObrigatorios.filter(campo => !formData[campo]);
+                    
+                    if (camposVazios.length > 0) {
+                        throw new Error('Por favor, preencha todos os campos obrigatórios.');
+                    }
+                    
+                    // Enviar para webhook específico do Coldmessage
+                    console.log('📤 Enviando para webhook Coldmessage...');
+                    console.log('🌐 URL do webhook:', LANDING_PAGE_CONFIG.coldmessageWebhookUrl);
+                    console.log('📦 Dados sendo enviados:', JSON.stringify(formData, null, 2));
+                    
+                    const response = await fetch(LANDING_PAGE_CONFIG.coldmessageWebhookUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(formData)
+                    });
+                    
+                    console.log('📥 Status da resposta:', response.status);
+                    
+                    if (response.ok) {
+                        // Ler resposta apenas uma vez
+                        const responseText = await response.text();
+                        let responseData;
+                        
+                        try {
+                            responseData = JSON.parse(responseText);
+                            console.log('📄 Resposta JSON:', responseData);
+                        } catch (parseError) {
+                            responseData = { content: responseText };
+                            console.log('📄 Resposta como texto:', responseData);
+                        }
+                        
+                        // Exibir resultados
+                        displayGeneratedMessage(responseData, formData);
+                        
+                    } else {
+                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    }
+                    
+                } catch (error) {
+                    console.error('❌ Erro na geração:', error);
+                    
+                    // Exibir erro
+                    generatedMessage.style.display = 'block';
+                    generatedMessage.innerHTML = `
+                        <div class="post-content">
+                            <h3>❌ Erro na Geração</h3>
+                            <p><strong>Erro:</strong> ${error.message}</p>
+                            <p>Verifique se o webhook está configurado corretamente.</p>
+                        </div>
+                    `;
+                } finally {
+                    loadingSpinner.style.display = 'none';
+                    submitButtonText.textContent = 'Gerar Cold Message';
+                }
+            });
+            
+            function displayGeneratedMessage(responseData, formData) {
+                // Determinar conteúdo da resposta
+                let content, metadata;
+                
+                if (responseData.message) {
+                    content = responseData.message.content || responseData.message;
+                    metadata = responseData.message.metadata || {};
+                } else if (responseData.success) {
+                    content = responseData.success.content || responseData.success;
+                    metadata = responseData.success.metadata || {};
+                } else if (typeof responseData === 'string') {
+                    content = responseData;
+                    metadata = {};
+                } else if (responseData.content) {
+                    content = responseData.content;
+                    metadata = responseData.metadata || {};
+                } else {
+                    // Se não encontrar estrutura específica, usar a resposta completa
+                    content = responseData;
+                    metadata = {};
+                }
+                
+                // Construir HTML da mensagem preservando a estrutura
+                let html = `
+                    <div class="post-content">
+                        <h3>Cold Message: ${formData.empresa}</h3>
+                        <div class="post-metadata">
+                            <div class="metadata-item"><strong>Executivo:</strong> ${formData.executivoVenda}</div>
+                            <div class="metadata-item"><strong>Segmento:</strong> ${formData.segmento}</div>
+                            <div class="metadata-item"><strong>Persona:</strong> ${formData.persona}</div>
+                            <div class="metadata-item"><strong>Prioridade:</strong> ${formData.prioridade_da_oferta}</div>
+                            <div class="metadata-item"><strong>Canal:</strong> ${formData.canal}</div>
+                            <div class="metadata-item"><strong>CTA:</strong> ${formData.cta_tipo}</div>
+                            ${formData.framework_copy ? `<div class="metadata-item"><strong>Framework:</strong> ${formData.framework_copy}</div>` : ''}
+                        </div>
+                        <div style="margin-top: 1.5rem;">
+                            <h4>Mensagem Gerada:</h4>
+                            <div class="analysis-content">
+                `;
+                
+                // Preservar a estrutura original da resposta
+                if (typeof content === 'string') {
+                    // Se for string, preservar quebras de linha e formatação
+                    html += content.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                } else if (typeof content === 'object') {
+                    // Se for objeto, mostrar como JSON formatado
+                    html += JSON.stringify(content, null, 2).replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                } else {
+                    // Fallback
+                    html += String(content).replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                }
+                
+                html += `
+                            </div>
+                        </div>
+                `;
+                
+                // Adicionar metadados se existirem
+                if (metadata && Object.keys(metadata).length > 0) {
+                    html += `
+                        <div class="post-metadata">
+                            <h4>Metadados da Mensagem:</h4>
+                            <div style="margin-top: 1rem;">
+                                <pre style="background: #f5f5f5; padding: 1rem; border-radius: 4px; overflow-x: auto;">${JSON.stringify(metadata, null, 2)}</pre>
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                // Adicionar botões de ação
+                html += `
+                    <div class="post-actions">
+                        <button class="action-btn copy-btn" onclick="copyMessage()">
+                            Copiar Mensagem
+                        </button>
+                        <button class="action-btn download-btn" onclick="downloadMessage()">
+                            Baixar
+                        </button>
+                        <button class="action-btn regenerate-btn" onclick="regenerateMessage()">
+                            Nova Mensagem
+                        </button>
+                    </div>
+                </div>`;
+                
+                // Exibir resultados
+                generatedMessage.innerHTML = html;
+                generatedMessage.style.display = 'block';
+                
+                console.log('✅ Cold message exibida com sucesso');
+            }
+            
+            // Funções globais para os botões
+            window.copyMessage = function() {
+                const messageContent = document.querySelector('.post-content');
+                if (messageContent) {
+                    navigator.clipboard.writeText(messageContent.textContent).then(() => {
+                        showNotification('Mensagem copiada para a área de transferência!', 'success');
+                    }).catch(() => {
+                        showNotification('Erro ao copiar a mensagem', 'error');
+                    });
+                }
+            };
+            
+            window.downloadMessage = function() {
+                const messageContent = document.querySelector('.post-content');
+                if (messageContent) {
+                    const content = messageContent.textContent;
+                    const blob = new Blob([content], { type: 'text/plain' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'cold-message.txt';
+                    a.click();
+                    URL.revokeObjectURL(url);
+                    showNotification('Mensagem baixada com sucesso!', 'success');
+                }
+            };
+            
+            window.regenerateMessage = function() {
+                console.log('🔄 Regenerando cold message...');
+                
+                // Limpar resultados atuais
+                generatedMessage.style.display = 'none';
+                emptyState.style.display = 'block';
+                
+                // Re-enviar formulário
+                form.dispatchEvent(new Event('submit'));
+            };
+            
+            function showNotification(message, type = 'info') {
+                const notification = document.createElement('div');
+                notification.className = `notification ${type}`;
+                notification.textContent = message;
+                
+                const container = document.getElementById('notificationContainer');
+                if (container) {
+                    container.appendChild(notification);
+                    
+                    setTimeout(() => {
+                        notification.remove();
+                    }, 5000);
+                }
+            }
+        });
+    </script>
+</body>
+</html> 
